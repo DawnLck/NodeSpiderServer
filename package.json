@@ -1,0 +1,12 @@
+{
+  "name": "NodeSpiderServer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Liangck",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "brain.js": "^1.0.0",
+    "express": "^4.16.2"
+  }
+}
