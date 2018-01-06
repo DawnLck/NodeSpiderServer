@@ -7,6 +7,7 @@
   "devDependencies": {},
   "dependencies": {
     "brain.js": "^1.0.0",
+    "expect": "^22.0.3",
     "express": "^4.16.2",
     "log4js": "^2.4.1",
     "phantom": "^4.0.12"
