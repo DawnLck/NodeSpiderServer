@@ -8,7 +8,7 @@ var phantom = require('phantom');
 var log4js = require('log4js');
 var log4Logger = log4js.getLogger();
 var expect = require('expect');
-log4Logger.setLevel(log4js.levels.INFO);
+log4Logger.level = log4js.levels.INFO;
 
 /**/
 // phantom.create(['--ignore-ssl-error=yes','--load-images=no'],{
