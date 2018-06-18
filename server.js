@@ -3,35 +3,18 @@
  * The main file running on the express server
  * */
 
-var express = require('express');
+const express = require('express');
 
-var webpageInit = require('./backend/init/webpageInit');
-var mongoInit = require('./backend/init/mongoInit');
-var deepLearn = require('./backend/init/brainInit');
+const webpageInit = require('./backend/init/webpageInit'),
+    mongoInit = require('./backend/init/mongoInit'),
+    deepLearn = require('./backend/init/brainInit');
+
+const initRoute = require('./backend/routes/init'),
+    processRoute = require('./backend/routes/process');
 
 var app = express();
-
-/* Express server 接收请求 get & post */
-app.get('/deepLearnLinks', function (req, res) {
-    webpageInit.parseSingleWebsite(req.query.webpageName, req.query.webpageUrl, 'a', function (index, data) {
-        console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
-        // console.log(data[0]);
-        deepLearn.useLinkDNN_Arr(data, function (callbackData) {
-            // console.log(callbackData);
-            res.send(callbackData);
-        });
-    });
-});
-app.get('/deepLearnContent', function (req, res) {
-    webpageInit.parseSingleWebsite(req.query.webpageName, req.query.webpageUrl, 'div', function (index, data) {
-        console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
-        // console.log(data[0]);
-        deepLearn.useContentDNN_Arr(data, function (callbackData) {
-            // console.log(callbackData);
-            res.send(callbackData);
-        });
-    });
-});
+app.use('/init', initRoute);
+app.use('/process', processRoute);
 
 /* 打开nodeJs服务器 */
 var server = app.listen(8080, function () {
@@ -55,9 +38,9 @@ var test = function () {
 /* 后台运行脚本 */
 var init = function () {
     console.log('Init the backend-app...');
-    mongoInit.init();
-    webpageInit.init();
-    deepLearn.init();
+    // mongoInit.init();
+    // webpageInit.init();
+    // deepLearn.init();
     // test();
 };
 init();
