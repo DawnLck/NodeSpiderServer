@@ -4,15 +4,15 @@
  * ES6可以使用新的语法
  * ES5使用promise的写法
  * */
-var phantom = require('phantom');
-var log4js = require('log4js');
-var log4Logger = log4js.getLogger();
-var expect = require('expect');
-log4Logger.level = log4js.levels.INFO;
+let phantom = require('phantom');
+// let log4js = require('log4js');
+// let log4Logger = log4js.getLogger();
+let expect = require('expect');
+// log4Logger.level = log4js.levels.INFO;
 
 /**/
 // phantom.create(['--ignore-ssl-error=yes','--load-images=no'],{
-var createPhantom = function (urlName, url, tagName, callback) {
+let createPhantom = function (urlName, url, tagName, callback) {
     //console.log('OutTagNameTest: ' + tagName);
     phantom.create(['--load-images=no'], {
         // phantomPath: 'E:/Environment/phantomjs/bin', // 选择phantomjs所在的安装路径
@@ -20,16 +20,16 @@ var createPhantom = function (urlName, url, tagName, callback) {
         logLever: 'info'
     }).then(function (instance) {
         instance.createPage().then(function (page) {
-            var outObj = instance.createOutObject();
+            let outObj = instance.createOutObject();
             outObj.urls = [];
             //开启javascript加载
             page.setting('javascriptEnabled').then(function (value) {
                 expect(value).toEqual(true);
             });
 
-            page.property('viewportSize', {width: 1920, height: 900}).then(function () {
+            page.on('viewportSize', {width: 1920, height: 900}).then(function () {
             });
-            page.property('onResourceRequested', function (requestData, networkRequest, out) {
+            page.on('onResourceRequested', function (requestData, networkRequest, out) {
                 out.urls.push(requestData.url);
             }, outObj);
 
@@ -46,11 +46,11 @@ var createPhantom = function (urlName, url, tagName, callback) {
                     console.log('Now is working');
                     page.evaluate(function (tName) {
                         //console.log(document);
-                        var resultArray = [];
+                        let resultArray = [];
                         // console.log('tName: ' + tName);
-                        var tagArray = document.getElementsByTagName(tName);
-                        for (var i = 0, length = tagArray.length; i < length; i++) {
-                            var domItem = {
+                        let tagArray = document.getElementsByTagName(tName);
+                        for (let i = 0, length = tagArray.length; i < length; i++) {
+                            let domItem = {
                                 dom_url: tagArray[i].baseURI,
                                 dom_tagName: tagArray[i].tagName,
                                 dom_id: tagArray[i].id,
@@ -85,7 +85,7 @@ var createPhantom = function (urlName, url, tagName, callback) {
         })
     });
 };
-// var urlGoZjut = 'http://weibo.com/?category=1760';
+// let urlGoZjut = 'http://weibo.com/?category=1760';
 // createPhantom(1, urlGoZjut, 'a', function (index, data) {
 //     console.log('Data ' + index + '...');
 //     console.log(data.length);

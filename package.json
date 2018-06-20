@@ -6,11 +6,10 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "brain.js": "1.0.0",
-    "expect": "22.0.3",
-    "express": "4.16.2",
-    "log4js": "2.9.0",
-    "mongoose": "5.0.0-rc2",
-    "phantom": "4.0.12"
+    "brain.js": "1.2.2",
+    "expect": "^23.1.0",
+    "express": "4.16.3",
+    "mongoose": "5.1.6",
+    "phantom": "6.0.0"
   }
 }
