@@ -2,8 +2,8 @@
 * */
 
 
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
 // // 该路由使用的中间件
 // router.use(function timeLog(req, res, next) {
@@ -21,7 +21,7 @@ router.get('/about', function(req, res) {
 });
 
 /* Express server 接收请求 get & post */
-app.get('/dpLinks', function (req, res) {
+router.get('/dpLinks', function (req, res) {
     webpageInit.parseSingleWebsite(req.query.webpageName, req.query.webpageUrl, 'a', function (index, data) {
         console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
         // console.log(data[0]);
@@ -31,7 +31,7 @@ app.get('/dpLinks', function (req, res) {
         });
     });
 });
-app.get('/dpContent', function (req, res) {
+router.get('/dpContent', function (req, res) {
     webpageInit.parseSingleWebsite(req.query.webpageName, req.query.webpageUrl, 'div', function (index, data) {
         console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
         // console.log(data[0]);

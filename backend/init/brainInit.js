@@ -1,14 +1,14 @@
-var mongoose = require('mongoose');
-var myDomScheme = require('../mongooseModel').domSchema;
-var saveDlArray = require('../mongooseModel').saveDeepLearnArray;
-var brain = require('brain.js');
+let mongoose = require('mongoose');
+let myDomScheme = require('../mongooseModel').domSchema;
+let saveDlArray = require('../mongooseModel').saveDeepLearnArray;
+let brain = require('brain.js');
 
-var linksNet = null;
-var contentNet = null;
+let linksNet = null;
+let contentNet = null;
 
-var reduceModel = function (modelName, callback) {
+let reduceModel = function (modelName, callback) {
     console.log('Reduce model....' + modelName);
-    var targetModel = mongoose.model(modelName, myDomScheme);
+    let targetModel = mongoose.model(modelName, myDomScheme);
     targetModel.find({}, function (err, docs) {
         if (err || !docs.length) {
             console.log(err);
@@ -16,10 +16,10 @@ var reduceModel = function (modelName, callback) {
         else {
             console.log('Doc.Length: ' + docs.length);
             // console.log(docs);
-            var samples = [];
-            var saveArray = [];
-            for (var index in docs) {
-                var doc = docs[index];
+            let samples = [];
+            let saveArray = [];
+            for (let index in docs) {
+                let doc = docs[index];
                 samples.push({
                     input: [
                         doc.dom_brothersNum,
@@ -50,10 +50,10 @@ var reduceModel = function (modelName, callback) {
 };
 
 /* 化简数据 */
-var reduceData = function (arr) {
-    var reduceArr = [];
-    for (var index in arr) {
-        var doc = arr[index];
+let reduceData = function (arr) {
+    let reduceArr = [];
+    for (let index in arr) {
+        let doc = arr[index];
         reduceArr.push(
             doc.dom_brothersNum,
             doc.dom_childrenNum,
@@ -68,16 +68,16 @@ var reduceData = function (arr) {
 };
 
 /* 构建并训练神经网络 */
-var deepLearn = function (input, callback) {
-    var net = new brain.NeuralNetwork({
+let deepLearn = function (input, callback) {
+    let net = new brain.NeuralNetwork({
         hiddenLayers: [8, 7],
         learningRate: 0.2
     });
-    // var inputArray = [{input: [0, 0], output: [0]},
+    // let inputArray = [{input: [0, 0], output: [0]},
     //     {input: [0, 1], output: [1]},
     //     {input: [1, 0], output: [1]},
     //     {input: [1, 1], output: [0]}];
-    // var testData = [1,0];
+    // let testData = [1,0];
     net.train(input, {
         errorThresh: 0.005,  // error threshold to reach
         iterations: 20000,   // maximum training iterations
@@ -85,14 +85,14 @@ var deepLearn = function (input, callback) {
         logPeriod: 5000,       // number of iterations between logging
         learningRate: 0.1    // learning rate
     });
-    // var output = net.run(test);
+    // let output = net.run(test);
     callback(net);
 };
 
 /* 使用神经网络（数组形式输入） */
-var testArray = function (arr, net, callback) {
-    var result = [];
-    for (var index in arr) {
+let testArray = function (arr, net, callback) {
+    let result = [];
+    for (let index in arr) {
         testSingleCase(net, arr[index], function (data) {
             result.push(data.slice());
         });
@@ -101,15 +101,15 @@ var testArray = function (arr, net, callback) {
 };
 
 /* 使用神经网络（单例形式输入） */
-var testSingleCase = function (net, testItem, callback) {
+let testSingleCase = function (net, testItem, callback) {
     // console.log(testItem);
     callback(net.run(testItem));
 };
 
 /*评估神经网络 */
-var evaluateDNN = function (arr, net, callback) {
-    var result = [];
-    for (var index in arr) {
+let evaluateDNN = function (arr, net, callback) {
+    let result = [];
+    for (let index in arr) {
         testSingleCase(net, arr[index].input, function (data) {
             // result.push(data.slice());
             console.log('index： ' + index + ' w：' + arr[index].input);
@@ -126,24 +126,24 @@ var evaluateDNN = function (arr, net, callback) {
     callback(result);
 };
 
-var useLinkDNN_Arr = function (arr, callback) {
+let useLinkDNN_Arr = function (arr, callback) {
     console.log('Using Link-DNN to parse webpage....');
-    var net = linksNet;
-    var result = [];
-    var index = 0;
-    var arrLength = arr.length;
-    // var getProbability = function () {
+    let net = linksNet;
+    let result = [];
+    let index = 0;
+    let arrLength = arr.length;
+    // let getProbability = function () {
     //     if (index < arrLength) {
-    //         var doc = arr[index];
+    //         let doc = arr[index];
     //         // console.log(doc);
-    //         var docReduce = [doc.dom_brothersNum,
+    //         let docReduce = [doc.dom_brothersNum,
     //             doc.dom_childrenNum,
     //             doc.dom_height,
     //             doc.dom_width,
     //             doc.dom_left,
     //             doc.dom_top,
     //             doc.dom_innerText ? doc.dom_innerText.length : 0];
-    //         var probability = net.run(docReduce);
+    //         let probability = net.run(docReduce);
     //
     //         probability = probability['0'].toFixed(4);
     //         if (probability > 0.3) {
@@ -166,16 +166,16 @@ var useLinkDNN_Arr = function (arr, callback) {
     // })();
 
     for (; index < arrLength; index++) {
-        var doc = arr[index];
+        let doc = arr[index];
         // console.log(doc);
-        var docReduce = [doc.dom_brothersNum,
+        let docReduce = [doc.dom_brothersNum,
             doc.dom_childrenNum,
             doc.dom_height,
             doc.dom_width,
             doc.dom_left,
             doc.dom_top,
             doc.dom_innerText ? doc.dom_innerText.length : 0];
-        var probability = net.run(docReduce);
+        let probability = net.run(docReduce);
 
         probability = probability['0'].toFixed(4);
         if (probability > 0.3) {
@@ -191,18 +191,18 @@ var useLinkDNN_Arr = function (arr, callback) {
     callback(result);
 };
 
-var useContentDNN_Arr = function (arr, callback) {
+let useContentDNN_Arr = function (arr, callback) {
     console.log('Using Content-DNN to parse webpage....');
-    var net = contentNet;
-    var result = [];
-    var arrLength = arr.length;
-    var height_limit = arr[0].dom_height - 1000;
-    for (var index = 0; index < arrLength; index++) {
-        var doc = arr[index];
+    let net = contentNet;
+    let result = [];
+    let arrLength = arr.length;
+    let height_limit = arr[0].dom_height - 1000;
+    for (let index = 0; index < arrLength; index++) {
+        let doc = arr[index];
         if (doc.dom_height > height_limit) {
             continue;
         }
-        var docReduce = [
+        let docReduce = [
             doc.dom_brothersNum,
             doc.dom_childrenNum,
             doc.dom_height,
@@ -210,7 +210,7 @@ var useContentDNN_Arr = function (arr, callback) {
             doc.dom_left,
             doc.dom_top,
             doc.dom_innerText ? doc.dom_innerText.length : 0];
-        var probability = net.run(docReduce);
+        let probability = net.run(docReduce);
         // console.log(probability);
         probability = probability['0'].toFixed(4);
         if (probability > 0.3) {
@@ -227,9 +227,9 @@ var useContentDNN_Arr = function (arr, callback) {
 };
 
 /* 测试神经网络 */
-var testDNN = function () {
+let testDNN = function () {
     reduceModel('dom_ex8', function (input) {
-        var test = [[14, 0, 16, 78, 436, 12, 8],
+        let test = [[14, 0, 16, 78, 436, 12, 8],
             [1, 0, 16, 254, 0, 13, 18],
             [1, 0, 16, 330, 0, 13, 24]];//测试案例
 
@@ -249,8 +249,8 @@ var testDNN = function () {
     });
 };
 
-var trainLinkDNN = function (modelName, callback) {
-    var targetModel = mongoose.model(modelName, myDomScheme);
+let trainLinkDNN = function (modelName, callback) {
+    let targetModel = mongoose.model(modelName, myDomScheme);
     targetModel.find({}, function (err, docs) {
         // console.log(docs.length);
         if (err || !docs.length) {
@@ -258,10 +258,10 @@ var trainLinkDNN = function (modelName, callback) {
         }
         else {
             console.log('Doc.Length: ' + docs.length);
-            var trainSamples = [];
-            // var saveArray = [];
-            for (var index in docs) {
-                var doc = docs[index];
+            let trainSamples = [];
+            // let saveArray = [];
+            for (let index in docs) {
+                let doc = docs[index];
                 if (doc.dom_height < 1000) {
                     trainSamples.push({
                         input: [
@@ -293,7 +293,7 @@ var trainLinkDNN = function (modelName, callback) {
             // saveDlArray(saveArray, modelName + '_reduce');
             console.log('TrainSamples Length: ' + trainSamples.length);
             console.log(trainSamples[0]);
-            var net = new brain.NeuralNetwork({
+            let net = new brain.NeuralNetwork({
                 hiddenLayers: [8, 7],
                 learningRate: 0.2
             });
@@ -305,8 +305,8 @@ var trainLinkDNN = function (modelName, callback) {
                 learningRate: 0.1    // learning rate
             });
 
-            // for (var testIndex in trainSamples) {
-            //     var probability = net.run(trainSamples[testIndex].input);
+            // for (let testIndex in trainSamples) {
+            //     let probability = net.run(trainSamples[testIndex].input);
             //     probability = probability['0'].toFixed(4);
             //     if(probability > 0.3){
             //         console.log('target!: (' + testIndex + ' ' + probability + ')'  + ' ' + trainSamples[testIndex].output);
@@ -322,9 +322,9 @@ var trainLinkDNN = function (modelName, callback) {
     });
 };
 
-var trainContentDNN = function (modelName, callback) {
+let trainContentDNN = function (modelName, callback) {
     console.log('Reduce model....' + modelName);
-    var targetModel = mongoose.model(modelName, myDomScheme);
+    let targetModel = mongoose.model(modelName, myDomScheme);
     targetModel.find({}, function (err, docs) {
         console.log(docs.length);
         if (err || !docs.length) {
@@ -332,10 +332,10 @@ var trainContentDNN = function (modelName, callback) {
         }
         else {
             console.log('Doc.Length: ' + docs.length);
-            var trainSamples = [];
-            // var saveArray = [];
-            for (var index in docs) {
-                var doc = docs[index];
+            let trainSamples = [];
+            // let saveArray = [];
+            for (let index in docs) {
+                let doc = docs[index];
                 if (doc.dom_height < 1000) {
                     trainSamples.push({
                         input: [
@@ -367,7 +367,7 @@ var trainContentDNN = function (modelName, callback) {
             // saveDlArray(saveArray, modelName + '_reduce');
             console.log('TrainSamples Length: ' + trainSamples.length);
             console.log(trainSamples[0]);
-            var net = new brain.NeuralNetwork({
+            let net = new brain.NeuralNetwork({
                 hiddenLayers: [9, 8],
                 learningRate: 0.2
             });
@@ -379,8 +379,8 @@ var trainContentDNN = function (modelName, callback) {
                 learningRate: 0.1    // learning rate
             });
 
-            // for (var testIndex in trainSamples) {
-            //     var probability = net.run(trainSamples[testIndex].input);
+            // for (let testIndex in trainSamples) {
+            //     let probability = net.run(trainSamples[testIndex].input);
             //     probability = probability['0'].toFixed(4);
             //     if(probability > 0.3){
             //         console.log('target!: (' + testIndex + ' ' + probability + ')'  + ' ' + trainSamples[testIndex].output);
@@ -415,13 +415,13 @@ exports.init = function () {
     trainContentDNN('content_train_2', function (net) {
         contentNet = net;
         console.log('DeepContentNet is ready...');
-        // var test = [
+        // let test = [
         //     [6, 1, 2126, 1920, 0, 0, 7049],
         //     [3, 1, 390, 652, 481, 417, 408],
         //     [1, 0, 0, 1920, 0, 261, 0]
         // ];
-        // for (var index in test) {
-        //     var probability = net.run(test[index]);
+        // for (let index in test) {
+        //     let probability = net.run(test[index]);
         //     probability = probability['0'].toFixed(4);
         //     console.log(index + ' ' + probability);
         // }

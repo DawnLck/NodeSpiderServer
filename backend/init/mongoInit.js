@@ -2,13 +2,13 @@
  * MongoInit.js
  * Created by Dell on 2017/3/3.
  */
-var MyWebPageModel = require("../mongooseModel").MyWebPageModel;
-var MyMinWebPageModel = require('../mongooseModel').MyMinWebPageModel;
-var simplifyWebPageCollection = function () {
+let MyWebPageModel = require("../mongooseModel").MyWebPageModel;
+let MyMinWebPageModel = require('../mongooseModel').MyMinWebPageModel;
+let simplifyWebPageCollection = function () {
     MyWebPageModel.find({}, function (err, docs) {
         //Javascript 原生写法
-        for (var i = 0, len = docs.length; i < len; i++) {
-            var simplifyModel = new MyMinWebPageModel({
+        for (let i = 0, len = docs.length; i < len; i++) {
+            let simplifyModel = new MyMinWebPageModel({
                 id: i + 1,
                 category: docs[i].category,
                 info: docs[i].info,
