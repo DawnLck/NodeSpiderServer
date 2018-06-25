@@ -21,9 +21,9 @@ router.get('/', async function (req, res) {
 
     phantom.createPhantom(urlName, url, tag, function(result){
         console.log('Result'+ result);
+        res.send('Route - process');
     });
 
-    res.send('Route - process');
 });
 // 定义 about 页面的路由
 router.get('/about', function (req, res) {

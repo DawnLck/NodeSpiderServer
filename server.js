@@ -7,7 +7,10 @@ const express = require('express');
 
 const webpageInit = require('./backend/init/webpageInit'),
     mongoInit = require('./backend/init/mongoInit'),
-    deepLearn = require('./backend/init/brainInit');
+    deepLearn = require('./backend/init/brainInit'),
+    puppeteer = require('./backend/tools/Puppeteer')
+    // chromeHeadless = require('./backend/tools/ChromeHeadless')
+;
 
 const initRoute = require('./backend/routes/init'),
     processRoute = require('./backend/routes/process');
@@ -36,13 +39,15 @@ let test = function () {
 };
 
 /* 后台运行脚本 */
-let init = function () {
-    console.log('Init the backend-app...');
+async function init() {
+    await console.log('Init the backend-app...');
+    await puppeteer.init();
     // mongoInit.init();
     // webpageInit.init();
     // deepLearn.init();
     // test();
-};
-init();
+    // chromeHeadless.preRender();
+}
+init(()=>{});
 
 // console.log('End...');

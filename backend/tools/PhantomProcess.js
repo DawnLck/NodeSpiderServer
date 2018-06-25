@@ -45,6 +45,12 @@ function createPhantom(urlName = 'image', url, tagName='div', callback) {
                 // });
                 // console.log('ResultArray :');
                 console.log('Now is working');
+                page.evaluate(function () {
+                    var tagArray = document.getElementsByTagName('a');
+                    console.log(document);
+                    console.log(tagArray);
+                    // console.log(tagName);
+                });
                 // page.evaluate(function (tName) {
                 //     console.log(document);
                 //     let resultArray = [];
@@ -76,7 +82,8 @@ function createPhantom(urlName = 'image', url, tagName='div', callback) {
                 // }, tagName);
                 await page.render('backend/render/' + urlName + '.png');
                 await console.log('done');
-                page.close();
+                await page.close();
+                return null;
             }).catch(function (err) {
                 console.log(err);
                 instance.exit();
