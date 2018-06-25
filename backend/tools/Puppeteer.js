@@ -1,11 +1,14 @@
 const puppeteer = require('puppeteer');
-const TAG_LINK = 'A';
-const TAG_DIV = 'DIV';
+const pageClassify = require('../algorithm/pageClassify');
+
+const TAG_LINK = 'A',
+    TAG_DIV = 'DIV';
+const META_KEYWORD = 'meta[name="keywords"]';
 
 async function init() {
     // await screenShot('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
     // await getDimension('https://segmentfault.com/a/1190000015369542');
-    await domSelector('https://segmentfault.com/a/1190000015369542');
+    await domSelector('http://bbs.tianya.cn/post-develop-2298254-1-1.shtml');
     // await downloadPdf('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
 }
 
@@ -62,9 +65,15 @@ async function getDimension(url) {
 
 //针对页面进行操作
 async function domSelector(url) {
-    const browser = await puppeteer.launch({headless: false});
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            "--window-size=1366," + (768 * 2)
+        ]
+    });
     const page = await browser.newPage();
-    await page.goto(url);
+    await page.goto(url, {waitUntil: 'domcontentloaded'});
+    await page.waitFor(1000);
     await page.setViewport({
         width: 1366,
         height: 768 * 2
@@ -74,21 +83,34 @@ async function domSelector(url) {
 
     //把内部的console打印出来
     page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+    await page.addScriptTag({url: 'https://code.jquery.com/jquery-3.2.1.min.js'});
+    const pageCallback = await page.evaluate(async (sel) => {
+        console.log(sel);
 
-    const dimensions = await page.evaluate((sel) => {
+        let title = document.title,
+            keywords = $('meta[name="keywords"]').attr('content'),
+            description = $('meta[name="description"]').attr('content') || $('meta[name="Description"]').attr('content'),
+            bodyContent = $('body').text();
+
         const $els = document.querySelectorAll(sel);
 
         console.log('ELS Length: ' + $els.length);//写在内部的console会直接打印在headless浏览器里
 
         return {
+            title: title,
+            keywords: keywords,
+            description: description,
+            bodyContent: bodyContent,
             width: document.documentElement.clientWidth,
             height: document.documentElement.clientHeight,
             deviceScaleFactor: window.devicePixelRatio
         };
     }, TAG_LINK);
 
+    pageClassify.process(pageCallback);
 
-    console.log('Dimensions:', dimensions);
+
+    // console.log('callback: ', pageCallback);
 
     // await browser.close();
 }
