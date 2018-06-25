@@ -75,14 +75,19 @@ async function process(pageCallback){
         bbs: 0,
         articles: 0,
         news: 0
-    };
-    console.log(pageCallback.title);
-    console.log(pageCallback.keywords);
-    console.log(pageCallback.description);
+    },
+        queue = [
+            'bbs',
+            'article',
+            'news'
+        ];
+    // console.log(pageCallback.title);
+    // console.log(pageCallback.keywords);
+    // console.log(pageCallback.description);
     result = await calculateWeights(result, pageCallback.title);
     result = await calculateWeights(result, pageCallback.keywords);
     result = await calculateWeights(result, pageCallback.description);
-    console.log(result);
+
 
     if ((result.bbs + result.articles + result.news) === 0) {
         // console.log('基于内容进行第二次网页分类 ... ');
@@ -90,7 +95,20 @@ async function process(pageCallback){
 
         result = await pcalculateWeights(result, pageCallback.bodyContent);
     }
-    console.log(result.bbs + ' ' + result.articles + ' ' + result.news);
+
+    let max = 0;
+    result.category = null;
+    for(let i = 0;i<queue.length;i++){
+        let cate = queue[i];
+        if(result[cate] > max){
+            result.category = cate;
+            max = result[cate];
+        }
+        cate = null;
+    }
+    max = null;
+
+    return result;
 }
 
 exports.calculateWeights = calculateWeights;

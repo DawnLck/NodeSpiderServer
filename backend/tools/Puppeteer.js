@@ -73,13 +73,13 @@ async function domSelector(url) {
     });
     const page = await browser.newPage();
     await page.goto(url, {waitUntil: 'domcontentloaded'});
+
     await page.waitFor(1000);
     await page.setViewport({
         width: 1366,
         height: 768 * 2
     });
     // Get the "viewport" of the page, as reported by the page.
-
 
     //把内部的console打印出来
     page.on('console', msg => console.log('PAGE LOG:', msg.text()));
@@ -105,14 +105,41 @@ async function domSelector(url) {
             height: document.documentElement.clientHeight,
             deviceScaleFactor: window.devicePixelRatio
         };
-    }, TAG_LINK);
+    }, TAG_DIV);
 
-    pageClassify.process(pageCallback);
+    let classifyResult = await pageClassify.process(pageCallback);
+    console.log(classifyResult);
+
+    function markLeafNode(){
+
+    }
+
+    function markPostList(){
+        console.log('Mark post list ... ');
+        page.evaluate(async () => {
+            
+        })
+    }
 
 
-    // console.log('callback: ', pageCallback);
+    if (classifyResult.category) {
+        //可以进行分类的网页
+        switch (classifyResult.category) {
+            case 'bbs':
+                markPostList();
+                break;
+            case 'articles':
+                break;
+            case 'news':
+                break;
+            default:
+                break;
+        }
+    } else {
+        //无法分类的网页
+    }
 
-    // await browser.close();
+    await browser.close();
 }
 
 
