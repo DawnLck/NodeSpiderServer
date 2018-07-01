@@ -1,0 +1,91 @@
+/* content.css */
+.collect-btn {
+  display: none; }
+
+.spider.main {
+  box-sizing: border-box;
+  border: 1px solid #E08031 !important;
+  position: relative; }
+.spider.mainMask {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #E08031;
+  opacity: 0.3; }
+.spider.marked {
+  position: relative; }
+  .spider.marked.listNode {
+    border: 1px solid #044D22 !important; }
+  .spider.marked:hover .collect-btn {
+    display: block !important;
+    top: 0;
+    left: 0; }
+.spider.unmarked {
+  border: 1px dashed #a94442 !important; }
+.spider.leaf {
+  border: 1px solid #ACDA9E !important; }
+.spider.toast {
+  text-align: left;
+  padding: 20px 30px;
+  display: inline-block;
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  z-index: 9999;
+  box-sizing: content-box;
+  width: 200px;
+  height: 66px;
+  border-radius: 4px;
+  max-width: 500px;
+  font-family: "Microsoft JhengHei UI", serif;
+  box-shadow: 1px 7px 14px -5px rgba(0, 0, 0, 0.2);
+  background: white; }
+  .spider.toast .toast-content {
+    box-sizing: content-box; }
+  .spider.toast .toast-title {
+    margin-bottom: 5px;
+    color: #3e3e3e;
+    font-weight: 700;
+    font-size: 20px; }
+  .spider.toast .toast-message {
+    font-size: 14px;
+    color: #878787; }
+  .spider.toast .toast-close {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    width: 14px;
+    cursor: pointer;
+    height: 14px;
+    fill: #878787;
+    transform: translateY(-50%); }
+  .spider.toast:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px; }
+  .spider.toast.toast-green:before {
+    background-color: #044D22; }
+.spider .collect-btn {
+  position: absolute;
+  display: none;
+  z-index: 9999999999998;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+  background: #aaa;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  cursor: pointer;
+  padding: 0 12px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 2px;
+  font-size: 14px; }
+
+/*# sourceMappingURL=content.css.map */

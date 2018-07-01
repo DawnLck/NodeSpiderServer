@@ -2,11 +2,11 @@
  * Mongoose Model
  * */
 require('./mongooseConnect');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
 
 /* Define The WebPage Schema 定义网页模式 */
-var webpageSchema = new Schema({
+const webpageSchema = new Schema({
     id: Number,
     category: Number,
     url: String,
@@ -16,7 +16,7 @@ var webpageSchema = new Schema({
     versionKey: false //取消collection在初次建立时生成的_v内部版本数据属性
 });
 /* Define The Dom Schema 定义DOM模式 */
-var domSchema = new Schema({
+const domSchema = new Schema({
     dom_url: String,            //源网址
     dom_tagName: String,        //标签名
     dom_id: String,             //id属性类
@@ -34,7 +34,7 @@ var domSchema = new Schema({
 }, {
     versionKey: false           //是否要添加版本信息
 });
-var deepLearnSchema = new Schema({
+const deepLearnSchema = new Schema({
     brotherNum: Number,
     childrenNum: Number,
     height: Number,
@@ -46,10 +46,36 @@ var deepLearnSchema = new Schema({
 }, {
     versionKey: false
 });
+/* Define the post-list data schema 定义帖子数据模式
+* */
+const postListSchema = new Schema({
 
-var saveArray = function (arr, collName, schema) {
-    var arrLength = arr.length;
-    var targetModel = mongoose.model(collName, schema, collName);
+    /* Dom Property*/
+    baseUrl: String,
+    brotherElementCount: Number,
+    childElementCount: Number,
+    className: String, //可能含有item
+    height: Number,
+    width: Number,
+    id: String, //如果有id
+    offsetLeft: Number,
+    offsetTop: Number,
+    innerText: String,
+    outerHTML: String,
+
+    /* Text Property */
+    content: String,
+    author: String,
+    authorUrl: String,
+    date: Date
+},{
+    versionKey: false
+});
+
+
+let saveArray = function (arr, collName, schema) {
+    let arrLength = arr.length;
+    let targetModel = mongoose.model(collName, schema, collName);
 
     console.log('CollName:' + collName + ' ArrayLength: ' + arrLength);
 
@@ -59,8 +85,8 @@ var saveArray = function (arr, collName, schema) {
         }
     });
 
-    for (var i = 0; i < arrLength; i++) {
-        var item = arr[i];
+    for (let i = 0; i < arrLength; i++) {
+        let item = arr[i];
         // console.log('Processing ' + i + '/' + arrLength);
         new targetModel(item).save(function (err) {
             if (err) {
@@ -72,18 +98,18 @@ var saveArray = function (arr, collName, schema) {
         }).catch();
     }
 };
-var saveDeepLearnArray = function (arr, collName) {
+let saveDeepLearnArray = function (arr, collName) {
     saveArray(arr, collName, deepLearnSchema);
 };
 /*  将DOM结点数组存放进集合中  */
-var saveDomArrayToCollection = function (arr, collName) {
+let saveDomArrayToCollection = function (arr, collName) {
     console.log('Save Dom Array To Collection...');
     //console.log(collName);
     saveArray(arr, collName, domSchema);
 };
 /* 将单个DOM结点存放进集合中 */
-var saveDomItemToCollection = function (item, collName) {
-    var targetModel = mongoose.model(collName, domSchema);
+let saveDomItemToCollection = function (item, collName) {
+    let targetModel = mongoose.model(collName, domSchema);
     new targetModel(item).save(function (err) {
         if (err) {
             console.log(err);
@@ -93,7 +119,7 @@ var saveDomItemToCollection = function (item, collName) {
     });
 };
 
-var readAllDocs = function (collName, callback) {
+let readAllDocs = function (collName, callback) {
     mongoose.model(collName).find({}, function (err, docs) {
         if (err) {
             console.log(err);
@@ -105,8 +131,8 @@ var readAllDocs = function (collName, callback) {
 };
 
 /* Define the data model Student 将模式与模型相关联 */
-var MyMinWebPageModel = mongoose.model('min_webpages', webpageSchema);
-var MyDomModel = mongoose.model('doms', webpageSchema);
+let MyMinWebPageModel = mongoose.model('min_webpages', webpageSchema);
+let MyDomModel = mongoose.model('doms', webpageSchema);
 
 exports.MyMinWebPageModel = MyMinWebPageModel;
 exports.MyDomModel = MyDomModel;

@@ -16,11 +16,11 @@ mongoose.set('debug', false);
 mongoose.connect(DB_DatabasePath);
 const db = mongoose.connection;
 
-db.on("error", function (error) {
+db.on("error", async function (error) {
     console.log("Fail to make connection to MongoDB：" + error);
 });
 
-db.once("open", function () {
+db.once("open", async function () {
     console.log("Success to connect the MongoDB.");
 });
 

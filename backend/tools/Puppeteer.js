@@ -1,5 +1,9 @@
-const puppeteer = require('puppeteer');
-const pageClassify = require('../algorithm/pageClassify');
+/* Puppeteer */
+const mongoModel = require('../mongooseModel'),
+    timings = require('timings.js'),
+    puppeteer = require('puppeteer'),
+    // pupp = require('../tools/PuppeteerConfig'),
+    pageClassify = require('../algorithm/pageClassify');
 
 const TAG_LINK = 'A',
     TAG_DIV = 'DIV';
@@ -8,7 +12,11 @@ const META_KEYWORD = 'meta[name="keywords"]';
 async function init() {
     // await screenShot('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
     // await getDimension('https://segmentfault.com/a/1190000015369542');
-    await domSelector('http://bbs.tianya.cn/post-develop-2298254-1-1.shtml');
+
+    // await domSelector('http://bbs.tianya.cn/post-develop-2298254-1-1.shtml');
+    await domSelector('https://tieba.baidu.com/p/5758158945');
+
+
     // await downloadPdf('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
 }
 
@@ -65,25 +73,50 @@ async function getDimension(url) {
 
 //针对页面进行操作
 async function domSelector(url) {
+    console.log('网页信息提取： ' + url);
+
+    const browserTracker = timings();
+
+    // noinspection JSAnnotator
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         args: [
-            "--window-size=1366," + (768 * 2)
+            "--window-size=1366," + (768 * 2),
+            '--disable-dev-shm-usage'
         ]
     });
+    // noinspection JSAnnotator
     const page = await browser.newPage();
-    await page.goto(url, {waitUntil: 'domcontentloaded'});
 
-    await page.waitFor(1000);
+
+    await page.setRequestInterception(true);
+    page.on('request', interceptedRequest => {
+        if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg') || interceptedRequest.url().endsWith('.jpeg') || interceptedRequest.url().endsWith('.gif'))
+            interceptedRequest.abort();
+        else
+            interceptedRequest.continue();
+    });
+
+    // await page.waitFor(1000);
     await page.setViewport({
         width: 1366,
         height: 768 * 2
     });
     // Get the "viewport" of the page, as reported by the page.
 
+    await page.goto(url, {waitUntil: 'domcontentloaded'});
+
+
     //把内部的console打印出来
     page.on('console', msg => console.log('PAGE LOG:', msg.text()));
-    await page.addScriptTag({url: 'https://code.jquery.com/jquery-3.2.1.min.js'});
+
+    //添加依赖的js库以及css样式表
+    await page.addScriptTag({path: 'node_modules/jquery/dist/jquery.slim.min.js'});
+    await page.addStyleTag({path: 'backend/stylesheets/content.css'});
+
+    const browserDuration = browserTracker();
+    console.log(`Page 加载时间 ... ${browserDuration} 毫秒`);
+
     const pageCallback = await page.evaluate(async (sel) => {
         console.log(sel);
 
@@ -110,14 +143,57 @@ async function domSelector(url) {
     let classifyResult = await pageClassify.process(pageCallback);
     console.log(classifyResult);
 
-    function markLeafNode(){
+    async function markLeafNode() {
+        console.log('Mark Leaf Node ...');
+        page.evaluate(async () => {
+            console.log('Mark Leaf Node ... ');
+            let bodyWidth = $('body').width();
+            let allDiv = $('div');
 
+            //标记
+            allDiv.each(function () {
+                let _width = $(this).width() / bodyWidth * 100.0;
+                let _height = $(this).height();
+                let _text = $(this).text();
+
+                if (_text) {
+                    if (_width > 30 && _width < 96 && _text.length > 0 && _height > 3) {
+                        $(this).addClass('spider leaf');
+                    }
+                    else {
+                        $(this).addClass('spider unmarked');
+                    }
+                }
+            });
+
+            //筛选
+            $('div.spider.leaf').each(function () {
+                if ($(this).find('.leaf').length > 0) {
+                    $(this).removeClass('leaf');
+                }
+            });
+        });
     }
 
-    function markPostList(){
+    async function markPostList() {
         console.log('Mark post list ... ');
         page.evaluate(async () => {
-            
+            $('div.leaf').each(function () {
+                // console.log($(this).text());
+                let _parent = $(this).parent();
+                console.log(_parent.children('.leaf').length);
+                //listNode节点所包含的叶子节点数必须大于等于两个
+                if (_parent.children('.leaf').length >= 2) {
+                    // console.log(_parent.text());
+                    // console.log(_parent.children('.leaf').length);
+                    _parent.addClass('listNode marked');
+                    _parent.find('a').each(function () {
+                        console.log(this.text + ' url: ' + this.value);
+                    })
+                    // console.log();
+                } else {
+                }
+            });
         })
     }
 
@@ -126,7 +202,8 @@ async function domSelector(url) {
         //可以进行分类的网页
         switch (classifyResult.category) {
             case 'bbs':
-                markPostList();
+                await markLeafNode();
+                await markPostList();
                 break;
             case 'articles':
                 break;
@@ -139,8 +216,7 @@ async function domSelector(url) {
         //无法分类的网页
     }
 
-    await browser.close();
+    // await browser.close();
 }
-
 
 exports.init = init;

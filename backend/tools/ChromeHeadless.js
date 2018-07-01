@@ -78,7 +78,6 @@ async function preRender() {
             } catch (e) {
                 reject(e);
             }
-            ;
         });
         Promise.all(tasks).then(() => {
             resolve();

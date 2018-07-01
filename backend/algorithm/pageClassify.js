@@ -93,7 +93,7 @@ async function process(pageCallback){
         // console.log('基于内容进行第二次网页分类 ... ');
         console.log('The second classify based on content ... ');
 
-        result = await pcalculateWeights(result, pageCallback.bodyContent);
+        result = await calculateWeights(result, pageCallback.bodyContent);
     }
 
     let max = 0;
