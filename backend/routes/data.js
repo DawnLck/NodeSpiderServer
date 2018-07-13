@@ -1,26 +1,20 @@
 /* Route - data
 * */
 
-var express = require('express');
-var router = express.Router();
+const express = require('express'),
+    router = express.Router(),
+    {webpagesModel} = require('../mongodb');
 
-// // 该路由使用的中间件
-// router.use(function timeLog(req, res, next) {
-//     console.log('Time: ', Date.now());
-//     next();
-// });
-
-// 定义网站主页的路由
-router.get('/', function(req, res) {
-    res.send('Route - process');
-});
-// 定义 about 页面的路由
-router.get('/about', function(req, res) {
-    res.send('Route - process -about');
-});
-// 定义 about 页面的路由
-router.get('/about', function(req, res) {
-    res.send('Route - process -about');
+router.get('/savePage', function (req, res) {
+    console.log(req.query);
+    let data = new webpagesModel(req.query);
+    data.save().then(suc => {
+        console.log('保存成功：' + suc);
+        res.send('保存成功：' + suc);
+    }, err => {
+        console.log('保存失败: ' + err);
+        res.send('保存失败: ' + err)
+    })
 });
 
 module.exports = router;

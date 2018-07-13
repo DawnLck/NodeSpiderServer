@@ -1,9 +1,8 @@
 /* Route - init
 * */
 
-
-let express = require('express');
-let router = express.Router();
+const express = require('express'),
+    router = express.Router();
 
 // // 该路由使用的中间件
 // router.use(function timeLog(req, res, next) {
@@ -20,26 +19,5 @@ router.get('/about', function(req, res) {
     res.send('Route - init -about');
 });
 
-/* Express server 接收请求 get & post */
-router.get('/dpLinks', function (req, res) {
-    webpageInit.parseSingleWebsite(req.query.webpageName, req.query.webpageUrl, 'a', function (index, data) {
-        console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
-        // console.log(data[0]);
-        deepLearn.useLinkDNN_Arr(data, function (callbackData) {
-            // console.log(callbackData);
-            res.send(callbackData);
-        });
-    });
-});
-router.get('/dpContent', function (req, res) {
-    webpageInit.parseSingleWebsite(req.query.webpageName, req.query.webpageUrl, 'div', function (index, data) {
-        console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
-        // console.log(data[0]);
-        deepLearn.useContentDNN_Arr(data, function (callbackData) {
-            // console.log(callbackData);
-            res.send(callbackData);
-        });
-    });
-});
 
 module.exports = router;

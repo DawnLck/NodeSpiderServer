@@ -6,6 +6,10 @@
   box-sizing: border-box;
   border: 1px solid #E08031 !important;
   position: relative; }
+.spider.post {
+  box-sizing: border-box;
+  border: 1px solid #e05371 !important;
+  position: relative; }
 .spider.mainMask {
   display: inline-block;
   position: absolute;
@@ -18,15 +22,18 @@
 .spider.marked {
   position: relative; }
   .spider.marked.listNode {
+    box-sizing: border-box;
     border: 1px solid #044D22 !important; }
   .spider.marked:hover .collect-btn {
     display: block !important;
     top: 0;
     left: 0; }
 .spider.unmarked {
+  box-sizing: border-box;
   border: 1px dashed #a94442 !important; }
-.spider.leaf {
-  border: 1px solid #ACDA9E !important; }
+.spider.listNode {
+  border: 1px solid #ACDA9E !important;
+  box-sizing: border-box; }
 .spider.toast {
   text-align: left;
   padding: 20px 30px;

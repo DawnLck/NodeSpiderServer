@@ -25,13 +25,5 @@ router.get('/', async function (req, res) {
     });
 
 });
-// 定义 about 页面的路由
-router.get('/about', function (req, res) {
-    res.send('Route - process -about');
-});
-// 定义 about 页面的路由
-router.get('/about', function (req, res) {
-    res.send('Route - process -about');
-});
 
 module.exports = router;

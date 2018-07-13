@@ -6,17 +6,17 @@
 const express = require('express');
 
 const webpageInit = require('./backend/init/webpageInit'),
-    mongoInit = require('./backend/init/mongoInit'),
     deepLearn = require('./backend/init/brainInit'),
-    puppeteer = require('./backend/tools/Puppeteer')
-    // chromeHeadless = require('./backend/tools/ChromeHeadless')
-;
+    puppeteer = require('./backend/tools/Puppeteer');
+    // chromeHeadless = require('./backend/tools/ChromeHeadless');
 
 const initRoute = require('./backend/routes/init'),
+    dataRoute = require('./backend/routes/data'),
     processRoute = require('./backend/routes/process');
 
 let app = express();
 app.use('/init', initRoute);
+app.use('/data', dataRoute);
 app.use('/process', processRoute);
 
 /* 打开nodeJs服务器 */
@@ -40,8 +40,8 @@ let test = function () {
 
 /* 后台运行脚本 */
 async function init() {
-    await console.log('Init the backend-app...');
-    await puppeteer.init();
+    // await console.log('Init the backend-app...');
+    // await puppeteer.init();
     // mongoInit.init();
     // webpageInit.init();
     // deepLearn.init();

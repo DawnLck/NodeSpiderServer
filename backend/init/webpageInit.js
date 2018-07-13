@@ -2,8 +2,8 @@
  * Created by Dell on 2017/3/3.
  */
 // let WebpageAnalysis = require('../tools/WebpageAnalysis');
-let phantomExports = require('../tools/PhantomExport');
-let mongoModel = require('../mongooseModel');
+const phantomExports = require('../tools/PhantomExport');
+// let mongoModel = require('../mongoose');
 
 /* 解析网页表中的所有网站 */
 let saveAllWebsites = function (tableName) {

@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
-let myDomScheme = require('../mongooseModel').domSchema;
-let saveDlArray = require('../mongooseModel').saveDeepLearnArray;
+// let myDomScheme = require('../mongooseModel').domSchema;
+// let saveDlArray = require('../mongooseModel').saveDeepLearnArray;
 let brain = require('brain.js');
 
 let linksNet = null;

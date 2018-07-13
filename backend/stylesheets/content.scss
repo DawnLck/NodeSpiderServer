@@ -6,6 +6,7 @@ $color_leaf: #ACDA9E;
 
 $color_study: #2B637B;
 $color_main: #E08031;
+$color_post: #e05371;
 
 .collect-btn {
   display: none;
@@ -15,6 +16,11 @@ $color_main: #E08031;
   &.main{
     box-sizing: border-box;
     border: 1px solid $color_main !important;
+    position: relative;
+  }
+  &.post{
+    box-sizing: border-box;
+    border: 1px solid $color_post !important;
     position: relative;
   }
   &.mainMask{
@@ -32,6 +38,7 @@ $color_main: #E08031;
   &.marked {
     position: relative;
     &.listNode{
+      box-sizing: border-box;
       border: 1px solid $color_marked !important;
     }
     &:hover .collect-btn {
@@ -41,13 +48,15 @@ $color_main: #E08031;
     }
   }
   &.unmarked {
+    box-sizing: border-box;
     border: 1px dashed $color_unmarked !important;
     .collect-btn {
       //display: none;
     }
   }
-  &.leaf{
+  &.listNode{
     border: 1px solid $color_leaf !important;
+    box-sizing: border-box;
   }
   &.toast{
     text-align: left;
