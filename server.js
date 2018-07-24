@@ -20,7 +20,7 @@ app.use('/data', dataRoute);
 app.use('/process', processRoute);
 
 /* 打开nodeJs服务器 */
-let server = app.listen(8080, function () {
+let server = app.listen(8081, function () {
     let host = server.address().address;
     let port = server.address().port;
     console.log('App listening at http://%s:%s', host, port);

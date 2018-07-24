@@ -23,25 +23,61 @@ schemas.webpages = new Schema({
     versionKey: false //取消collection在初次建立时生成的_v内部版本数据属性
 });
 
-/* Define The Dom Schema 定义DOM模式 */
+/* Define the Dom Schema 定义节点的模式 */
 schemas.doms = new Schema({
-    dom_url: String,            //源网址
-    dom_tagName: String,        //标签名
-    dom_id: String,             //id属性类
-    dom_class: String,          //class样式类
-    dom_width: Number,          //DOM宽度
-    dom_height: Number,         //DOM高度
-    dom_left: Number,           //DOM横坐标
-    dom_top: Number,            //DOM纵坐标
-    dom_brothersNum: Number,    //同级结点数
-    dom_childrenNum: Number,    //子级结点数
-    dom_href: String,           //指向性链接
-    dom_innerHTML: String,      //DOM的HTML
-    dom_innerText: String,      //DOM的文本内容
-    targetFlag: Boolean         //是否为目标节点
+    /* meta信息 */
+    document_width: String,
+    document_height: String,
+    meta_href: String,
+    meta_domain: String,
+
+    /* Property 属性 */
+    classList: [String],
+    offsetTop: String,
+    offsetLeft: String,
+
+    realTop: String,
+    realLeft: String,
+
+    width: String,
+    height: String,
+
+    dom_level: String,
+    childElementCount: String,
+    siblingsCount: String,
+    innerText: String,
+    textDensity: String,
+    textPercentage: String,
+    linkElementCount: String,
+    links: [String],
+    imageElementCount: String,
+
+    /* category */
+    dom_category:  String
 }, {
-    versionKey: false           //是否要添加版本信息
+    versionKey: false //取消collection在初次建立时生成的_v内部版本数据属性
 });
+
+
+/* Define The Dom Schema 定义DOM模式 */
+// schemas.doms = new Schema({
+//     dom_url: String,            //源网址
+//     dom_tagName: String,        //标签名
+//     dom_id: String,             //id属性类
+//     dom_class: String,          //class样式类
+//     dom_width: Number,          //DOM宽度
+//     dom_height: Number,         //DOM高度
+//     dom_left: Number,           //DOM横坐标
+//     dom_top: Number,            //DOM纵坐标
+//     dom_brothersNum: Number,    //同级结点数
+//     dom_childrenNum: Number,    //子级结点数
+//     dom_href: String,           //指向性链接
+//     dom_innerHTML: String,      //DOM的HTML
+//     dom_innerText: String,      //DOM的文本内容
+//     targetFlag: Boolean         //是否为目标节点
+// }, {
+//     versionKey: false           //是否要添加版本信息
+// });
 
 /* Define the deep learn schema  */
 schemas.deepLearns = new Schema({
