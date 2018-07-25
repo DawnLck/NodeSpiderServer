@@ -3,7 +3,10 @@
 
 const express = require('express'),
     router = express.Router(),
+    bodyParser = require('body-parser'),
     {webpagesModel, domsModel} = require('../mongodb');
+
+router.use(bodyParser.urlencoded({extended: false}));
 
 router.get('/savePage', function (req, res) {
     console.log(req.query);
@@ -17,9 +20,9 @@ router.get('/savePage', function (req, res) {
     })
 });
 
-router.get('/saveDom', function (req, res) {
-    console.log(req.query);
-    let data = new domsModel(req.query);
+router.post('/saveDom', function (req, res) {
+    console.log(req.body);
+    let data = new domsModel(req.body);
     data.save().then(suc => {
         console.log('保存成功：' + suc);
         res.send('保存成功：' + suc);

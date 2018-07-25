@@ -30,6 +30,7 @@ schemas.doms = new Schema({
     document_height: String,
     meta_href: String,
     meta_domain: String,
+    title: String,
 
     /* Property 属性 */
     classList: [String],
@@ -45,9 +46,12 @@ schemas.doms = new Schema({
     dom_level: String,
     childElementCount: String,
     siblingsCount: String,
+
     innerText: String,
     textDensity: String,
-    textPercentage: String,
+    textMainPercentage: String,
+    textBodyPercentage: String,
+
     linkElementCount: String,
     links: [String],
     imageElementCount: String,
