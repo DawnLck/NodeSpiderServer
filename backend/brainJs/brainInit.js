@@ -1,10 +1,16 @@
-let mongoose = require('mongoose');
-// let myDomScheme = require('../mongooseModel').domSchema;
-// let saveDlArray = require('../mongooseModel').saveDeepLearnArray;
-let brain = require('brain.js');
+const {domsModel} = require('../mongodb'),
+    {getData} = require('./dateset'),
+    brain = require('brain.js');
 
-let linksNet = null;
-let contentNet = null;
+let linksNet = null,
+    contentNet = null;
+
+async function init(){
+    let data = await getData();
+    console.log(data);
+}
+init();
+// console.log(DATA());
 
 let reduceModel = function (modelName, callback) {
     console.log('Reduce model....' + modelName);

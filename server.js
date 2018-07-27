@@ -6,7 +6,7 @@
 const express = require('express');
 
 const webpageInit = require('./backend/init/webpageInit'),
-    deepLearn = require('./backend/init/brainInit'),
+    deepLearn = require('./backend/brainJs/brainInit'),
     puppeteer = require('./backend/tools/Puppeteer');
     // chromeHeadless = require('./backend/tools/ChromeHeadless');
 
