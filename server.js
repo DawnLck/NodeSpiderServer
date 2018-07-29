@@ -6,8 +6,9 @@
 const express = require('express');
 
 const webpageInit = require('./backend/init/webpageInit'),
-    deepLearn = require('./backend/brainJs/brainInit'),
-    puppeteer = require('./backend/tools/Puppeteer');
+    brainInit = require('./backend/brainJs/init');
+    // deepLearn = require('./backend/brainJs/brainInit'),
+    // puppeteer = require('./backend/tools/Puppeteer');
     // chromeHeadless = require('./backend/tools/ChromeHeadless');
 
 const initRoute = require('./backend/routes/init'),
@@ -27,19 +28,22 @@ let server = app.listen(8081, function () {
 });
 
 /* Test */
-let test = function () {
-    webpageInit.parseSingleWebsite('test', 'https://www.zhihu.com/question/59615727/answer/167124652', 'div', function (index, data) {
-        console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
-        // console.log(data[0]);
-        deepLearn.useContentDNN_Arr(data, function (callbackData) {
-            console.log('Content-DNN is over....');
-            // console.log(callbackData);
-        });
-    });
-};
+// let test = function () {
+//     webpageInit.parseSingleWebsite('test', 'https://www.zhihu.com/question/59615727/answer/167124652', 'div', function (index, data) {
+//         console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
+//         // console.log(data[0]);
+//         deepLearn.useContentDNN_Arr(data, function (callbackData) {
+//             console.log('Content-DNN is over....');
+//             // console.log(callbackData);
+//         });
+//     });
+// };
 
 /* 后台运行脚本 */
 async function init() {
+
+    // await brainInit.init();
+
     // await console.log('Init the backend-app...');
     // await puppeteer.init();
     // mongoInit.init();

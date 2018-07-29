@@ -1,4 +1,4 @@
-exports.shuffle = function(array) {
+module.exports.shuffle = function(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...

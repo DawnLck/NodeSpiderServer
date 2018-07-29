@@ -52,6 +52,7 @@ schemas.doms = new Schema({
     textMainPercentage: String,
     textBodyPercentage: String,
 
+    anchorMarkerCount: String,
     linkElementCount: String,
     links: [String],
     imageElementCount: String,

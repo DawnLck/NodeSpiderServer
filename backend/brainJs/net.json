@@ -1,0 +1,106 @@
+{
+    "sizes": [
+        8,
+        3,
+        4
+    ],
+    "layers": [
+        {
+            "width": {},
+            "height": {},
+            "dom_level": {},
+            "childElementCount": {},
+            "siblingsCount": {},
+            "textBodyPercentage": {},
+            "linkElementCount": {},
+            "imageElementCount": {}
+        },
+        {
+            "0": {
+                "bias": -0.5898624658584595,
+                "weights": {
+                    "width": -1.4304262399673462,
+                    "height": 0.5257008671760559,
+                    "dom_level": -1.0542842149734497,
+                    "childElementCount": -11.439793586730957,
+                    "siblingsCount": -3.019022226333618,
+                    "textBodyPercentage": 3.512643337249756,
+                    "linkElementCount": 0.1807451993227005,
+                    "imageElementCount": 0.6108863353729248
+                }
+            },
+            "1": {
+                "bias": -0.20310157537460327,
+                "weights": {
+                    "width": 2.089367628097534,
+                    "height": 0.5945221781730652,
+                    "dom_level": -8.685705184936523,
+                    "childElementCount": 1.1930166482925415,
+                    "siblingsCount": 8.782115936279297,
+                    "textBodyPercentage": 2.434344530105591,
+                    "linkElementCount": 6.609492778778076,
+                    "imageElementCount": 0.2739771008491516
+                }
+            },
+            "2": {
+                "bias": 1.8425707817077637,
+                "weights": {
+                    "width": 1.8772475719451904,
+                    "height": -0.4383097290992737,
+                    "dom_level": 0.6021251678466797,
+                    "childElementCount": -0.3727143406867981,
+                    "siblingsCount": 1.9871288537979126,
+                    "textBodyPercentage": -2.349059820175171,
+                    "linkElementCount": -3.582991600036621,
+                    "imageElementCount": -0.45012983679771423
+                }
+            }
+        },
+        {
+            "0": {
+                "bias": -2.7476394176483154,
+                "weights": {
+                    "0": 5.79456901550293,
+                    "1": 0.0861864909529686,
+                    "2": -4.433573246002197
+                }
+            },
+            "1": {
+                "bias": 0.04845642298460007,
+                "weights": {
+                    "0": -5.612546920776367,
+                    "1": 2.488421678543091,
+                    "2": -5.031063079833984
+                }
+            },
+            "2": {
+                "bias": -7.883049488067627,
+                "weights": {
+                    "0": -8.168550491333008,
+                    "1": 5.408730983734131,
+                    "2": 5.857195854187012
+                }
+            },
+            "3": {
+                "bias": 2.2201526165008545,
+                "weights": {
+                    "0": 0.3784218430519104,
+                    "1": -10.431045532226562,
+                    "2": 3.442981719970703
+                }
+            }
+        }
+    ],
+    "outputLookup": false,
+    "inputLookup": true,
+    "activation": "sigmoid",
+    "trainOpts": {
+        "iterations": 20000,
+        "errorThresh": 0.005,
+        "log": false,
+        "logPeriod": 10,
+        "learningRate": 0.3,
+        "momentum": 0.1,
+        "callbackPeriod": 10
+    }
+}

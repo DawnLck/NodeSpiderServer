@@ -1,43 +1,44 @@
-const {domsModel} = require('../mongodb');
+const {domsModel} = require('../mongodb'),
+    // iris = require('./iris'),
+    {shuffle} = require('./shuffle');
 
 module.exports.getData = async () => {
     let data = await domsModel.find({}, {
+        document_width: 0,
+        document_height: 0,
         classList: 0,
-        links: 0,
+        // links: 0,
         meta_href: 0,
         meta_domain: 0,
         title: 0,
+        textDensity: 0,
+        textMainPercentage: 0,
         innerText: 0
     }).exec();
+    // }).where('dom_category').in(['postArea', 'postItem', 'postItemAuthor']).exec();
     let samples = [],
         labels = [],
         length = data.length;
     for (let i = 0; i < length; i++) {
         await samples.push({
-            /* meta信息 */
-            document_width: data[i].document_width,
-            document_height: data[i].document_height,
-
             /* Property 属性 */
-            offsetTop: data[i].offsetTop,
-            offsetLeft: data[i].offsetLeft,
+            // offsetTop: data[i].offsetTop,
+            // offsetLeft: data[i].offsetLeft,
 
-            realTop: data[i].realTop,
-            realLeft: data[i].realLeft,
+            // realTop: data[i].realTop,
+            // realLeft: data[i].realLeft,
 
-            width: data[i].width,
-            height: data[i].height,
+            width: data[i].width / 1000,
+            height: data[i].height / 30000,
 
-            dom_level: data[i].dom_level,
-            childElementCount: data[i].childElementCount,
-            siblingsCount: data[i].siblingsCount,
+            dom_level: data[i].dom_level / 10,
+            childElementCount: data[i].childElementCount / 150,
+            siblingsCount: data[i].siblingsCount / 150,
 
-            textDensity: data[i].textDensity,
-            textMainPercentage: data[i].textMainPercentage,
             textBodyPercentage: data[i].textBodyPercentage,
 
-            linkElementCount: data[i].linkElementCount,
-            imageElementCount: data[i].imageElementCount
+            linkElementCount: data[i].links.length / 20,
+            imageElementCount: data[i].imageElementCount / 150
         });
         switch (data[i].dom_category) {
             case 'mainArea':
@@ -57,6 +58,8 @@ module.exports.getData = async () => {
         }
         // console.log(data[i]);
     }
+
+
     // console.log(samples);
     const orderedData = await samples.map((sample, index) => {
         return {
@@ -64,9 +67,12 @@ module.exports.getData = async () => {
             output: labels[index]
         }
     });
-    console.log(orderedData.length);
+    console.log('DATASET_LENGTH: ' + orderedData.length);
+
+    const shuffledData = shuffle(orderedData);
+
     // DATA = data;
-    return orderedData;
+    return shuffledData;
 };
 
 

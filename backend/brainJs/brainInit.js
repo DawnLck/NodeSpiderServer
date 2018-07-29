@@ -1,5 +1,6 @@
 const {domsModel} = require('../mongodb'),
     {getData} = require('./dateset'),
+    getAccuracy = require('./getAccuracy'),
     brain = require('brain.js');
 
 let linksNet = null,
