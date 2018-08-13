@@ -57,6 +57,14 @@ schemas.doms = new Schema({
     links: [String],
     imageElementCount: String,
 
+    /* parent Prop */
+    relativeTextPercentage: String,
+
+    parentWidth: String,
+    parentHeight: String,
+    parentAnchorMarkerCount: String,
+    parentImageCount: String,
+
     /* category */
     dom_category:  String
 }, {
