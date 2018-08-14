@@ -20,10 +20,10 @@ module.exports.getAccuracy = function (net, testData) {
         if (flag) {
             hits++;
         } else {
-            console.log('###############');
-            console.log(output);
-            console.log(result);
-            console.log(datapoint.output);
+            // console.log('###############');
+            // console.log(output);
+            // console.log(result);
+            // console.log(datapoint.output);
         }
 
     });

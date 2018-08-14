@@ -3,29 +3,49 @@
  * The main file running on the express server
  * */
 
-const express = require('express');
+const express = require('express'),
+    fs = require('fs'),
+    http = require('http'),
+    https = require('https');
+
+const privateKey  = fs.readFileSync('https/private.pem', 'utf8'),
+    certificate = fs.readFileSync('https/file.crt', 'utf8'),
+    credentials = {key: privateKey, cert: certificate};
 
 const webpageInit = require('./backend/init/webpageInit'),
     brainInit = require('./backend/brainJs/init');
-    // deepLearn = require('./backend/brainJs/brainInit'),
-    // puppeteer = require('./backend/tools/Puppeteer');
-    // chromeHeadless = require('./backend/tools/ChromeHeadless');
+// deepLearn = require('./backend/brainJs/brainInit'),
+// puppeteer = require('./backend/tools/Puppeteer');
+// chromeHeadless = require('./backend/tools/ChromeHeadless');
 
 const initRoute = require('./backend/routes/init'),
     dataRoute = require('./backend/routes/data'),
     processRoute = require('./backend/routes/process');
 
-let app = express();
+const app = express();
+const httpServer = http.createServer(app),
+    httpsServer = https.createServer(credentials, app),
+    PORT = 8081,
+    SSLPORT = 8082;
+
+
 app.use('/init', initRoute);
 app.use('/data', dataRoute);
 app.use('/process', processRoute);
 
 /* 打开nodeJs服务器 */
-let server = app.listen(8081, function () {
-    let host = server.address().address;
-    let port = server.address().port;
-    console.log('App listening at http://%s:%s', host, port);
+// let server = app.listen(8081, function () {
+//     let host = server.address().address;
+//     let port = server.address().port;
+//     console.log('App listening at http://%s:%s', host, port);
+// });
+httpServer.listen(PORT, function() {
+    console.log('HTTP Server is running on: http://localhost:%s', PORT);
 });
+httpsServer.listen(SSLPORT, function() {
+    console.log('HTTPS Server is running on: https://localhost:%s', SSLPORT);
+});
+
 
 /* Test */
 // let test = function () {
@@ -52,6 +72,8 @@ async function init() {
     // test();
     // chromeHeadless.preRender();
 }
-init(()=>{});
+
+init(() => {
+});
 
 // console.log('End...');

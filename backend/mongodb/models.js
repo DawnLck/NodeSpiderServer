@@ -14,4 +14,7 @@ let models = schemasNames.reduce((acc, name) => {
     return acc;
 }, {});
 
+models['testDomsModel'] = mongoose.model('testDoms', schemas['doms']);
+models['testPagesModel'] = mongoose.model('testPages', schemas['webpages']);
+
 module.exports = models;

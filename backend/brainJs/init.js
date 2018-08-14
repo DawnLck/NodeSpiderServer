@@ -25,9 +25,13 @@ async function init() {
     console.log('accuracy: ', accuracy);
 
     let jsonNet = JSON.stringify(net.toJSON(), null, 4);
-    await fs.writeFileSync(path.join(__dirname, 'net.json'), jsonNet);
-    console.log('NetWork 写入完成');
-    await fs.close();
+
+    fs.writeFile(path.join(__dirname, 'net.json'), jsonNet,{
+        encoding: 'utf8'
+    }, err => {
+        if (err) throw err;
+        console.log('NetWork 写入完成');
+    });
 
     return null;
 }
