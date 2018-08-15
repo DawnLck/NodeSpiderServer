@@ -75,6 +75,5 @@ module.exports.getData = async () => {
     return shuffledData;
 };
 
-
 // let data = getData();
 // console.log(data.length);

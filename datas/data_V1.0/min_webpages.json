@@ -1,0 +1,27 @@
+{
+	"_id": {
+		"$oid": "5a199b2713fa6d5bdc679743"
+	},
+	"id": 1,
+	"category": 5,
+	"url": "https://www.baidu.com/",
+	"info": "百度一下，你就知道"
+}
+{
+	"_id": {
+		"$oid": "5a41c343bf2b9d2ed0ac2e08"
+	},
+	"id": 2,
+	"category": 1,
+	"url": "http://bbs.tianya.cn/",
+	"info": "天涯首页"
+}
+{
+	"_id": {
+		"$oid": "5a41c3edbf2b9d2ed0ac2e09"
+	},
+	"id": 3,
+	"category": 1,
+	"url": "http://bbs.tianya.cn/",
+	"info": "天涯首页"
+}

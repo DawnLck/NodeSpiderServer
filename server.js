@@ -8,14 +8,15 @@ const express = require('express'),
     http = require('http'),
     https = require('https');
 
-const privateKey  = fs.readFileSync('https/private.pem', 'utf8'),
+const privateKey = fs.readFileSync('https/private.pem', 'utf8'),
     certificate = fs.readFileSync('https/file.crt', 'utf8'),
     credentials = {key: privateKey, cert: certificate};
 
 const webpageInit = require('./backend/init/webpageInit'),
-    brainInit = require('./backend/brainJs/init');
+    brainInit = require('./backend/brainJs/init'),
+    puppeteer = require('./backend/process/puppteerProcess/Puppeteer');
 // deepLearn = require('./backend/brainJs/brainInit'),
-// puppeteer = require('./backend/tools/Puppeteer');
+
 // chromeHeadless = require('./backend/tools/ChromeHeadless');
 
 const initRoute = require('./backend/routes/init'),
@@ -39,10 +40,10 @@ app.use('/process', processRoute);
 //     let port = server.address().port;
 //     console.log('App listening at http://%s:%s', host, port);
 // });
-httpServer.listen(PORT, function() {
+httpServer.listen(PORT, function () {
     console.log('HTTP Server is running on: http://localhost:%s', PORT);
 });
-httpsServer.listen(SSLPORT, function() {
+httpsServer.listen(SSLPORT, function () {
     console.log('HTTPS Server is running on: https://localhost:%s', SSLPORT);
 });
 
@@ -61,11 +62,11 @@ httpsServer.listen(SSLPORT, function() {
 
 /* 后台运行脚本 */
 async function init() {
-
     // await brainInit.init();
 
     // await console.log('Init the backend-app...');
-    // await puppeteer.init();
+    await puppeteer.init();
+
     // mongoInit.init();
     // webpageInit.init();
     // deepLearn.init();
