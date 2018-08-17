@@ -33,6 +33,7 @@ schemas.doms = new Schema({
     title: String,
 
     /* Property 属性 */
+    id: String,
     classList: [String],
     offsetTop: String,
     offsetLeft: String,

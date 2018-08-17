@@ -93,7 +93,7 @@ function calculateWeights(count, text, weight) {
     }
     let queue = ['bbs', 'articles', 'news'];
     for (let _index = 0; _index < queue.length; _index++) {
-        let _tem = GLOBAL[queue[_index]];
+        let _tem = GLOBAL_KEYS[queue[_index]];
         for (let j = 0; j < _tem.primaryKeys.length; j++) {
             if (text.indexOf(_tem.primaryKeys[j]) > -1) {
                 count[queue[_index]] += (2 * weight);

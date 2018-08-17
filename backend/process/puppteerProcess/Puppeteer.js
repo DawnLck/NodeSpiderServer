@@ -74,19 +74,14 @@ async function dataExtract(url, page) {
     //把内部的console打印出来
     page.on('console', msg => console.log('PAGE LOG:', msg.text()));
 
-    const pageClassifyCallback = await page.evaluate(async (sel, pageClassify) => {
-        console.log(sel);
+    const pageCallback = await page.evaluate(async () => {
 
         let title = document.title,
             keywords = $('meta[name="keywords"]').attr('content'),
             description = $('meta[name="description"]').attr('content') || $('meta[name="Description"]').attr('content'),
             bodyContent = $('body').text();
 
-        const $els = document.querySelectorAll(sel);
-
-        console.log('ELS Length: ' + $els.length);//写在内部的console会直接打印在headless浏览器里
-
-        return await pageClassify({
+        return {
             title: title,
             keywords: keywords,
             description: description,
@@ -94,8 +89,11 @@ async function dataExtract(url, page) {
             width: document.documentElement.clientWidth,
             height: document.documentElement.clientHeight,
             deviceScaleFactor: window.devicePixelRatio
-        });
-    }, config.TAG_DIV);
+        };
+    });
+
+    const classifyCallback = await pageClassify.process(pageCallback);
+    console.log(classifyCallback);
 
     const reusltCallback = await page.evaluate(async (sel) => {
 
@@ -294,7 +292,7 @@ async function dataExtract(url, page) {
             // console.log(result);
         }
 
-    }, pageClassifyCallback);
+    }, classifyCallback);
 
     // let classifyResult = await pageClassify.process(pageCallback);
     // console.log(classifyResult);
@@ -338,14 +336,18 @@ async function dataExtract(url, page) {
         })
     }
 
-    result = pageClassifyCallback;
+    result = classifyCallback;
 
-    let writerStream = fs.createWriteStream( pageCallback.title + '.txt');
-    writerStream.write(result, 'UTF8');
-    writerStream.end();
+    async function writeResult(data){
+        let writerStream = fs.createWriteStream(pageCallback.title + '.json');
+        await writerStream.write(data, 'UTF8');
+        await writerStream.end();
+    }
 
-    await Timer.stop('dataExtraction');
-    await console.log(`DataExtraction:  ${Timer.getTime('bbsExtraction')}`);
+    await writeResult(classifyCallback);
+
+    await Timer.stop('dataExtract');
+    await console.log(`DataExtraction:  ${Timer.getTime('dataExtract')}`);
 
     // await browser.close();
 }
