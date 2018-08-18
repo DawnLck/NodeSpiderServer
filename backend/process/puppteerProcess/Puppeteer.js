@@ -115,7 +115,8 @@ async function dataExtract(url, page) {
                 }
             };
             const rootFontSize = parseInt(window.getComputedStyle(document.getElementsByTagName('body')[0]).fontSize),
-                DATE_REG = /\d{4}-\d{2}-\d{2}/;
+                DATE_REG = /\d{4}-\d{2}-\d{2}|((\d{4})年)?(\d{1,2})月(\d{1,2})日|\d{2}:\d{2}/,
+                MIN_HEIGHT = 2 * rootFontSize;
 
             /* 标记主要区域 */
             async function markMainArea() {
@@ -142,7 +143,7 @@ async function dataExtract(url, page) {
                         if (_height > 60) {
                             // console.log(_width + ' ' + _height);
                             $(this).addClass('spider spider-main');
-                        } else if ($(this).height() > rootFontSize) {
+                        } else if ($(this).height() > MIN_HEIGHT) {
                             $(this).addClass('spider');
                             // console.log('## Spider: ' + $(this).height() + ' ' + $(this).text());
                         } else {
@@ -219,7 +220,7 @@ async function dataExtract(url, page) {
                             _width = _self.width(),
                             _height = _self.height();
 
-                        if ((_width / mainWidth * 100 > 70 && _height > rootFontSize)) {
+                        if ((_width / mainWidth * 100 > 70 && _height > MIN_HEIGHT)) {
                             _self.addClass('spider spider-content');
                             // console.log('Mark Content Node ...');
                             if (_height / mainHeight * 100 > 70 && _self.children('.spider-content').length > 5) {
@@ -295,7 +296,7 @@ async function dataExtract(url, page) {
                         _leafWidth = _self.width(),
                         _leafHeight = _self.height(),
                         _date = _self.prop('innerText').match(DATE_REG);
-                    if(_date){
+                    if (_date) {
                         _self.addClass('listNode');
                     }
 
@@ -360,8 +361,8 @@ async function dataExtract(url, page) {
                 let data = [];
                 $('.listNode').each(function () {
                     let _self = $(this),
-                     _content = _self.prop('innerText'),
-                    _date = _content.match(DATE_REG)[0];
+                        _content = _self.prop('innerText'),
+                        _date = _content.match(DATE_REG)[0];
                     data.push({
                         content: _content,
                         // authorName: _self.find('.post-authorName').innerText,
