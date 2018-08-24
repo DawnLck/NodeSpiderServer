@@ -295,7 +295,7 @@ async function dataExtract(url, page) {
                     let _self = $(this),
                         _leafWidth = _self.width(),
                         _leafHeight = _self.height(),
-                        _date = _self.prop('innerText').match(DATE_REG);
+                        _date = _self.prop('innerHTML').match(DATE_REG);
                     if (_date) {
                         _self.addClass('listNode');
                     }
@@ -361,8 +361,8 @@ async function dataExtract(url, page) {
                 let data = [];
                 $('.listNode').each(function () {
                     let _self = $(this),
-                        _content = _self.prop('innerText'),
-                        _date = _content.match(DATE_REG)[0];
+                        _content = _self.prop('innerText').replace(/\n+|\s+/gi, ''),
+                        _date = _self.prop('innerHTML').match(DATE_REG)[0];
                     data.push({
                         content: _content,
                         // authorName: _self.find('.post-authorName').innerText,
@@ -467,7 +467,7 @@ async function init() {
     });
     // Get the "viewport" of the page, as reported by the page.
 
-    await dataExtract('http://bbs.tianya.cn/post-worldlook-1853842-1.shtml', page);
+    await dataExtract('http://bbs.kaoyan.com/t8960275p1', page);
 
     // await downloadPdf('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
 }

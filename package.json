@@ -5,7 +5,7 @@
   "author": "Liangck",
   "license": "MIT",
   "devDependencies": {
-    "puppeteer": "^1.6.1",
+    "puppeteer": "^1.7.0",
     "timings.js": "^1.0.0"
   },
   "dependencies": {
