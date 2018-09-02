@@ -9,14 +9,14 @@
     "timings.js": "^1.0.0"
   },
   "dependencies": {
-    "brain.js": "1.2.4",
+    "brain.js": "1.2.8",
     "chrome-launcher": "^0.10.2",
-    "chrome-remote-interface": "^0.26.0",
-    "expect": "^23.4.0",
+    "chrome-remote-interface": "^0.26.1",
+    "expect": "^23.5.0",
     "express": "4.16.3",
     "jquery": "^3.3.1",
     "lighthouse": "^3.0.3",
-    "mongoose": "5.2.5",
+    "mongoose": "5.2.12",
     "phantom": "6.0.3"
   }
 }

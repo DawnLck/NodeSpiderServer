@@ -21,6 +21,11 @@ module.exports = {
             '--full-memory-crash-report'
         ]
     },
+    pageConfig:{
+        timeout: 30000,
+        waitUntil: 'domcontentloaded'
+        // waitUntil: 'networkidle2'
+    },
     TAG_LINK: 'A',
     TAG_DIV: 'DIV',
     META_KEYWORD: 'meta[name="keywords"]',

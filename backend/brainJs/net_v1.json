@@ -1,0 +1,123 @@
+{
+    "sizes": [
+        8,
+        4,
+        4
+    ],
+    "layers": [
+        {
+            "width": {},
+            "height": {},
+            "dom_level": {},
+            "childElementCount": {},
+            "siblingsCount": {},
+            "textBodyPercentage": {},
+            "linkElementCount": {},
+            "imageElementCount": {}
+        },
+        {
+            "0": {
+                "bias": 0.34596094489097595,
+                "weights": {
+                    "width": -1.2521233558654785,
+                    "height": 3.3579137325286865,
+                    "dom_level": -2.3611409664154053,
+                    "childElementCount": 2.152985095977783,
+                    "siblingsCount": -16.095088958740234,
+                    "textBodyPercentage": 8.882365226745605,
+                    "linkElementCount": 1.4665350914001465,
+                    "imageElementCount": -14.173354148864746
+                }
+            },
+            "1": {
+                "bias": 7.386464595794678,
+                "weights": {
+                    "width": -4.591198921203613,
+                    "height": -1.1973105669021606,
+                    "dom_level": -3.789447546005249,
+                    "childElementCount": -1.423784613609314,
+                    "siblingsCount": -13.870389938354492,
+                    "textBodyPercentage": -2.448528528213501,
+                    "linkElementCount": -1.2045913934707642,
+                    "imageElementCount": -10.224799156188965
+                }
+            },
+            "2": {
+                "bias": -2.523744583129883,
+                "weights": {
+                    "width": 1.0072368383407593,
+                    "height": 1.8019503355026245,
+                    "dom_level": -0.3724309802055359,
+                    "childElementCount": -3.848249912261963,
+                    "siblingsCount": 21.725080490112305,
+                    "textBodyPercentage": -0.22256223857402802,
+                    "linkElementCount": 0.7754279375076294,
+                    "imageElementCount": 15.952432632446289
+                }
+            },
+            "3": {
+                "bias": -11.319304466247559,
+                "weights": {
+                    "width": 6.513567924499512,
+                    "height": -5.820291519165039,
+                    "dom_level": 10.349719047546387,
+                    "childElementCount": 37.07659912109375,
+                    "siblingsCount": 4.9559831619262695,
+                    "textBodyPercentage": -1.7273967266082764,
+                    "linkElementCount": 0.04659988358616829,
+                    "imageElementCount": 2.768941640853882
+                }
+            }
+        },
+        {
+            "0": {
+                "bias": 2.342047691345215,
+                "weights": {
+                    "0": 6.891320705413818,
+                    "1": -4.028609752655029,
+                    "2": 2.8714475631713867,
+                    "3": -18.913801193237305
+                }
+            },
+            "1": {
+                "bias": -13.806092262268066,
+                "weights": {
+                    "0": 11.892667770385742,
+                    "1": -2.1326849460601807,
+                    "2": -10.333755493164062,
+                    "3": 17.071985244750977
+                }
+            },
+            "2": {
+                "bias": -4.043005466461182,
+                "weights": {
+                    "0": -13.437390327453613,
+                    "1": -9.09415340423584,
+                    "2": 3.1662068367004395,
+                    "3": 9.878487586975098
+                }
+            },
+            "3": {
+                "bias": 1.1024178266525269,
+                "weights": {
+                    "0": -3.9061830043792725,
+                    "1": 14.902836799621582,
+                    "2": -7.789098739624023,
+                    "3": -9.298553466796875
+                }
+            }
+        }
+    ],
+    "outputLookup": false,
+    "inputLookup": true,
+    "activation": "sigmoid",
+    "trainOpts": {
+        "iterations": 20000,
+        "errorThresh": 0.0005,
+        "log": true,
+        "logPeriod": 500,
+        "learningRate": 0.3,
+        "momentum": 0.1,
+        "callbackPeriod": 10
+    }
+}
