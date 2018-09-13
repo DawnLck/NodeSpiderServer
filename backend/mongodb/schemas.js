@@ -58,6 +58,10 @@ schemas.doms = new Schema({
     links: [String],
     imageElementCount: String,
 
+    /* CSS prop */
+    font_size: String,
+    line_height: String,
+
     /* parent Prop */
     relativeTextPercentage: String,
 
