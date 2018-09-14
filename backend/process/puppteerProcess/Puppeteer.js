@@ -635,6 +635,27 @@ async function verification(page) {
     console.log('Total page rate: ' + '[' + positivePageCount + ', ' + length + '] ' + positivePageCount / length);
 }
 
+async function webpageDataExtraction(webPageUrl){
+    if(!webPageUrl) return false;
+    const browser = await puppeteer.launch(config.browserConfig);
+    const page = await browser.newPage();
+
+    await page.setRequestInterception(true);
+    page.on('request', interceptedRequest => {
+        if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg') || interceptedRequest.url().endsWith('.jpeg') || interceptedRequest.url().endsWith('.gif'))
+            interceptedRequest.abort();
+        else
+            interceptedRequest.continue();
+    });
+
+    await page.setViewport({
+        width: 1366,
+        height: 768 * 2
+    });
+
+    return dataExtract('https://github.com/GoogleChrome/puppeteer/issues/2316', page);
+}
+
 // 控制puppeteer的进程
 async function init() {
     // await screenShot('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
@@ -659,10 +680,9 @@ async function init() {
     // Get the "viewport" of the page, as reported by the page.
 
     await dataExtract('https://github.com/GoogleChrome/puppeteer/issues/2316', page);
-    // await  verification(page);
-
-
+    // await verification(page);
     // await downloadPdf('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
 }
 
 exports.init = init;
+exports.webDataExtraction = webpageDataExtraction;
