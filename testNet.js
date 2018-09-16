@@ -1,4 +1,5 @@
-{
+const brain = require('brain.js');
+const netJSON = {
     "sizes": [
         8,
         4,
@@ -120,4 +121,17 @@
         "momentum": 0.1,
         "callbackPeriod": 10
     }
-}
+};
+
+let net = new brain.NeuralNetwork();
+net.fromJSON(netJSON);
+console.log(net.run({
+    "width": 0.744,
+    "height": 0.010233333333333334,
+    "dom_level": 0.8,
+    "childElementCount": 0.013333333333333334,
+    "siblingsCount": 0.22,
+    "textBodyPercentage": 0.032305433186490456,
+    "linkElementCount": 0.3,
+    "imageElementCount": 0.006666666666666667
+}));

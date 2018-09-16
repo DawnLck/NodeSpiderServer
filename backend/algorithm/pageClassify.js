@@ -1,5 +1,5 @@
 /*
-Page Classify 网页分类算法  
+Page Classify 网页分类算法
 * */
 
 const GLOBAL_KEYS = {
@@ -108,13 +108,16 @@ function calculateWeights(count, text, weight) {
     return count;
 }
 
-async function process(pageCallback){
+async function process(pageCallback) {
     console.log('... 网页分类 ...');
+    let hostname = pageCallback.hostname;
+    console.log(hostname);
     let result = {
-        bbs: 0,
-        articles: 0,
-        news: 0
+        bbs: hostname.indexOf('bbs') > -1 ? 1000 : 0,
+        articles: hostname.indexOf('articles') > -1 ? 1000 : 0,
+        news: hostname.indexOf('news') > -1 ? 1000 : 0
     };
+    console.log(result);
     // let queue = [
     //         'bbs',
     //         'article',
@@ -134,8 +137,8 @@ async function process(pageCallback){
     let max = 0;
     result.category = null;
 
-    for(let key in result){
-        if(result[key] > max){
+    for (let key in result) {
+        if (result[key] > max) {
             result.category = key;
             max = result[key];
         }
