@@ -226,8 +226,10 @@ async function dataExtract(url, page) {
                             _width = _self.width(),
                             _height = _self.height(),
                             _date = _self.prop('innerHTML').match(DATE_REG);
+
                         if (_date && (_width / mainWidth * 100 > 70 && _height > MIN_HEIGHT)) {
                             _self.addClass('spider spider-content');
+                            _self.find('script').remove();
                             if (_height / mainHeight * 100 > 70 && _self.children('.spider-content').length > 5) {
                                 _self.addClass('spider-post');
                             }
@@ -347,6 +349,10 @@ async function dataExtract(url, page) {
             async function postDataExtract() {
                 let output = {
                     listNode: [],
+                    listNodeCandidate: [],
+                    textNode: [],
+                    postAreaNode: [],
+                    mainAreaNode: [],
                     spiderNode: []
                 };
                 $('.spider-content').each(function () {
@@ -403,8 +409,13 @@ async function dataExtract(url, page) {
                         },
                         output: []
                     };
-
-                    _self.hasClass('listNode') ? output.listNode.push(item) : output.spiderNode.push(item);
+                    if (_self.hasClass('listNode')) {
+                        output.listNode.push(item);
+                    } else if (_self.children().length === 0) {
+                        output.textNode.push(item);
+                    } else {
+                        output.spiderNode.push(item);
+                    }
                 });
                 return output;
             }
@@ -422,18 +433,28 @@ async function dataExtract(url, page) {
     await net.fromJSON(_netJSON);
 
     let listNode = resultCallback.listNode || [],
+        postAreaNode = resultCallback.postAreaNode || [],
+        mainAreaNode = resultCallback.mainAreaNode || [],
+        listNodeCandidate = resultCallback.listNodeCandidate || [],
         spiderNode = resultCallback.spiderNode || [];
     for (let i = 0, length = listNode.length; i < length; i++) {
         listNode[i].output = net.run(listNode[i].item);
     }
 
     for (let j = 0, length = spiderNode.length; j < length; j++) {
+        let node = spiderNode[j];
         let output = net.run(spiderNode[j].item);
-        spiderNode[j].output = output;
-        console.log(Math.max.apply(null, output));
-        console.log(output.indexOf(Math.max.apply(null, output)));
-        if (output.indexOf(Math.max.apply(null, output)) === 3) {
-            spiderNode[j].output = undefined;
+        node.output = output;
+        let cateIndex = output.indexOf(Math.max.apply(null, output));
+        node.cate = cateIndex;
+        if (cateIndex === 0) {
+            mainAreaNode.push(node);
+        } else if (cateIndex === 1) {
+            postAreaNode.push(node);
+        } else if (cateIndex === 2) {
+            listNodeCandidate.push(node);
+        } else {
+
         }
     }
 
@@ -451,7 +472,7 @@ async function dataExtract(url, page) {
         // console.log('-----------');
         // console.log(item.output);
         // console.log(item.output !== undefined);
-        return item.output !== undefined;
+        return item.cate === 3;
     });
 
     // let classifyResult = await pageClassify.process(pageCallback);
@@ -495,8 +516,13 @@ async function dataExtract(url, page) {
         })
     }
 
-    await fs.writeFileSync(path.join(__dirname, 'verification/' + pageCallback.title.replace(/[:\|，。]/g, '').split(' ')[0] + '.json'), JSON.stringify(resultCallback, null, 2));
-
+    let dir = path.join(__dirname, 'verification/' + pageCallback.title.replace(/[?:\|，。"']/g, '').split(' ')[0] + '.json');
+    let stat = fs.existsSync(dir);
+    console.log(`${stat}: ${dir}`);
+    if (stat) {
+        dir = path.join(__dirname, 'verification/' + pageCallback.title.replace(/[?:\|，。"']/g, '') + '.json')
+    }
+    await fs.writeFileSync(dir, JSON.stringify(resultCallback, null, 2));
     await Timer.stop('dataExtract');
     await console.log(`DataExtraction:  ${Timer.getTime('dataExtract')}`);
 
@@ -511,11 +537,15 @@ async function verification(page) {
         positivePostItemCount = 0,
         totalPostItemCount = 0;
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < length; i++) {
+        if (testPages[i].domain === 'kaoyan') {
+            positivePageCount++;
+            continue;
+        }
         console.log(testPages[i]);
         let positive = 0;
         let pageUrl = testPages[i].url;
-        let groundTruth = await testDomsModel.find({meta_href: pageUrl}).exec();
+        let groundTruth = await testDomsModel.find({meta_href: pageUrl, dom_category: 'postItem'}).exec();
         console.log(pageUrl);
         // console.log(groundTruth);
         let truthLength = groundTruth.length;
@@ -593,8 +623,8 @@ async function init() {
     });
     // Get the "viewport" of the page, as reported by the page.
 
-    await dataExtract('http://bbs.tiexue.net/post_11482233_1.html', page);
-    // await verification(page);
+    // await dataExtract('http://bbs.3dmgame.com/thread-5784208-1-1.html', page);
+    await verification(page);
     // await downloadPdf('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
 }
 
