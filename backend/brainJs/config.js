@@ -16,5 +16,5 @@ module.exports.networkConfig = {
 };
 
 module.exports.datasetConfig = {
-    SPLIT : 1000
+    SPLIT : 700
 };

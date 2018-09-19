@@ -89,6 +89,7 @@ async function dataExtract(url, page) {
         return {
             title: title,
             hostname: window.location.hostname,
+            domain: window.location.hostname.split('.')[1],
             keywords: keywords,
             description: description,
             bodyContent: bodyContent,
@@ -121,8 +122,10 @@ async function dataExtract(url, page) {
                 }
             };
             const rootFontSize = parseInt(window.getComputedStyle(document.getElementsByTagName('body')[0]).fontSize),
-                DATE_REG = /\d{4}-\d{1,2}-\d{1,2}|((\d{4})年)?(\d{1,2})月(\d{1,2})日|\d{2}:\d{2}/gi,
+                DATE_REG = /[0-2]\d{3}-\d{1,2}-\d{1,2}|((\d{4})年)?(\d{1,2})月(\d{1,2})日|\d{2}:\d{2}/gi,
                 MIN_HEIGHT = 2 * rootFontSize;
+
+            $('iframe').remove();
 
             /* 标记主要区域 */
             async function markMainArea() {
@@ -220,21 +223,30 @@ async function dataExtract(url, page) {
                 mainSelector.addClass('spider-content');
 
                 function markContentNode(self) {
+                    // console.log('Mark Content Node ...');
+
                     self.children().each(function () {
                         markContentNode($(this));
                         let _self = $(this),
-                            _width = _self.width(),
-                            _height = _self.height(),
+                            _width = _self.prop('offsetWidth'),
+                            _height = _self.prop('offsetHeight'),
                             _date = _self.prop('innerHTML').match(DATE_REG);
-
-                        if (_date && (_width / mainWidth * 100 > 70 && _height > MIN_HEIGHT)) {
+                        if (_width / mainWidth * 100 > 70 && _height > MIN_HEIGHT && (_date || _self.siblings('.spider-content'))) {
+                            console.log('SPIDER_CONTENT: ' + _width + ' ' + _height + ' ' + _self.prop('tagName'));
                             _self.addClass('spider spider-content');
-                            _self.find('script').remove();
-                            if (_height / mainHeight * 100 > 70 && _self.children('.spider-content').length > 5) {
-                                _self.addClass('spider-post');
-                            }
+                        } else {
+                            // if(_width / mainWidth * 100 > 70 && _height > MIN_HEIGHT){
+                            //     console.log('#################');
+                            //     console.log('SPIDER-CONTENT: ' + _self.prop('innerText').substring(0, 10));
+                            //     console.log(_date);
+                            //     console.log(_self.prop('innerHTML'));
+                            //     console.log('#################');
+                            // }
                         }
-                    })
+                    });
+                    if (self.prop('offsetHeight') / mainHeight * 100.0 > 70 && self.children('.spider-content').length > 5) {
+                        self.addClass('spider-post');
+                    }
                 }
 
                 markContentNode(mainSelector);
@@ -267,29 +279,31 @@ async function dataExtract(url, page) {
 
                 $('.spider-post').children('.spider-content').each(function () {
                     let _self = $(this),
-                        _leafWidth = _self.width(),
-                        _leafHeight = _self.height();
+                        _leafWidth = _self.prop('offsetWidth'),
+                        _leafHeight = _self.prop('offsetHeight');
 
-                    _self.addClass('listNode');
+                    if(_self.prop('innerText').replace(/\n+|\s+/gi, '').length > 10){
+                        _self.addClass('listNode');
 
-                    function markLeafComponents(self) {
-                        self.children().each(function () {
-                            let _s = $(this),
-                                _width = _s.width() / _leafWidth * 100.0,
-                                _height = _s.height() / _leafHeight * 100.0;
+                        function markLeafComponents(self) {
+                            self.children().each(function () {
+                                let _s = $(this),
+                                    _width = _s.width() / _leafWidth * 100.0,
+                                    _height = _s.height() / _leafHeight * 100.0;
 
-                            if ((_s.width() > 12 && _height > 70) || (_s.height() > 12 && _width > 70)) {
-                                _s.addClass('spider listNode_components');
-                                markLeafComponents(_s);
-                            }
+                                if ((_s.width() > 12 && _height > 70) || (_s.height() > 12 && _width > 70)) {
+                                    _s.addClass('spider listNode_components');
+                                    markLeafComponents(_s);
+                                }
 
-                            _width = null;
-                            _height = null;
-                            _s = null;
-                        })
+                                _width = null;
+                                _height = null;
+                                _s = null;
+                            })
+                        }
+
+                        markLeafComponents(_self);
                     }
-
-                    markLeafComponents(_self);
 
                     // 考虑百度贴吧的两段式布局
                     // _self.children().each(function () {
@@ -350,6 +364,7 @@ async function dataExtract(url, page) {
                 let output = {
                     listNode: [],
                     listNodeCandidate: [],
+                    listNodeCandidateFilter: [],
                     textNode: [],
                     postAreaNode: [],
                     mainAreaNode: [],
@@ -357,6 +372,8 @@ async function dataExtract(url, page) {
                 };
                 $('.spider-content').each(function () {
                     let _self = $(this),
+                        _parent = _self.parent(),
+                        _innerTextLength = _self.prop('innerText').length,
                         _content = _self.prop('innerText').replace(/\n+|\s+/gi, ''),
                         _date = uniq(_self.prop('innerHTML').match(DATE_REG)),
                         _cursor = _self,
@@ -368,10 +385,20 @@ async function dataExtract(url, page) {
                         if ((_this.prop('offsetWidth') + _this.prop('offsetHeight')) !== 0) {
                             let _href = _this.attr('href');
                             // console.log(_this.prop('offsetWidth') + ' ' + _this.prop('offsetHeight') + ' ' + _href);
-                            if (_href && _href.indexOf('javascript:void(0)') < 0 && _href !== '#') {
-                                _linkContent.push(_href);
+                            if(_href){
+                                let rules = ['javascript:;', 'javascript:void(0)'];
+                                let flag = false;
+                                for (let i = 0, length = rules.length; i < length; i++) {
+                                    if (_href.indexOf(rules[i]) > -1) {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                                if(!flag && _href !== '#' && _href !== './'){
+                                    _linkContent.push(_href);
+                                }
                             }
-                            _href = null;
+
                         }
                     });
 
@@ -395,17 +422,20 @@ async function dataExtract(url, page) {
                         date: _date,
                         links: _linkContent,
                         item: {
-                            width: _self.prop('offsetWidth') / 1000,
-                            height: _self.prop('offsetHeight') / 30000,
+                            // width: _self.prop('offsetWidth') / 1000,
+                            // height: _self.prop('offsetHeight') / 30000,
+                            widthPercentage: _self.prop('offsetWidth') / $(document).width(),
+                            heightPercentage: _self.prop('offsetHeight') / $(document).height(),
 
                             dom_level: _dom_level / 10,
+                            textBodyPercentage: _innerTextLength / $('body').prop('innerText').length,
+                            relativeTextPercentage: _innerTextLength / _parent.prop('innerText').length,
+
                             childElementCount: _self.prop('childElementCount') / 150,
                             siblingsCount: _self.siblings().length / 150,
-
-                            textBodyPercentage: _self.prop('innerText').length / $('body').prop('innerText').length,
-
                             linkElementCount: _linkContent.length / 20,
-                            imageElementCount: _self.find('img').length / 150
+                            imageElementCount: _self.find('img').length / 150,
+                            anchorMarkerCount: _self.find('a').length / 150
                         },
                         output: []
                     };
@@ -436,6 +466,7 @@ async function dataExtract(url, page) {
         postAreaNode = resultCallback.postAreaNode || [],
         mainAreaNode = resultCallback.mainAreaNode || [],
         listNodeCandidate = resultCallback.listNodeCandidate || [],
+        listNodeCandidateFilter = resultCallback.listNodeCandidateFilter || [],
         spiderNode = resultCallback.spiderNode || [];
     for (let i = 0, length = listNode.length; i < length; i++) {
         listNode[i].output = net.run(listNode[i].item);
@@ -445,8 +476,10 @@ async function dataExtract(url, page) {
         let node = spiderNode[j];
         let output = net.run(spiderNode[j].item);
         node.output = output;
-        let cateIndex = output.indexOf(Math.max.apply(null, output));
+        let maxRate = Math.max.apply(null, output);
+        let cateIndex = output.indexOf(maxRate);
         node.cate = cateIndex;
+        if(maxRate < 0.6 || node.content.length < 10 || node.item.linkElementCount === 0 || node.item.imageElementCount === 0){continue;}
         if (cateIndex === 0) {
             mainAreaNode.push(node);
         } else if (cateIndex === 1) {
@@ -455,6 +488,15 @@ async function dataExtract(url, page) {
             listNodeCandidate.push(node);
         } else {
 
+        }
+    }
+
+    listNodeCandidateFilter.push(listNodeCandidate[0]);
+    for (let x = 1, length = listNodeCandidate.length; x < length; x++) {
+        let prevContent = listNodeCandidate[x - 1].content,
+            currentContent = listNodeCandidate[x].content;
+        if (!prevContent.includes(currentContent)) {
+            listNodeCandidateFilter.push(listNodeCandidate[x]);
         }
     }
 
@@ -516,11 +558,17 @@ async function dataExtract(url, page) {
         })
     }
 
-    let dir = path.join(__dirname, 'verification/' + pageCallback.title.replace(/[?:\|，。"']/g, '').split(' ')[0] + '.json');
-    let stat = fs.existsSync(dir);
+    let dirPath = 'verification/' + pageCallback.domain;
+    let stat = fs.existsSync(path.join(__dirname, dirPath));
+    if (!stat) {
+        fs.mkdir(path.join(__dirname, dirPath), err => {
+        });
+    }
+    let dir = path.join(__dirname, dirPath + '/' + pageCallback.title.replace(/[?:\|，。"']/g, '').split(' ')[0] + '.json');
+    stat = fs.existsSync(dir);
     console.log(`${stat}: ${dir}`);
     if (stat) {
-        dir = path.join(__dirname, 'verification/' + pageCallback.title.replace(/[?:\|，。"']/g, '') + '.json')
+        dir = path.join(__dirname, dirPath + '/' + pageCallback.title.replace(/[?:\|，。"']/g, '') + '.json')
     }
     await fs.writeFileSync(dir, JSON.stringify(resultCallback, null, 2));
     await Timer.stop('dataExtract');
@@ -546,24 +594,25 @@ async function verification(page) {
         let positive = 0;
         let pageUrl = testPages[i].url;
         let groundTruth = await testDomsModel.find({meta_href: pageUrl, dom_category: 'postItem'}).exec();
-        console.log(pageUrl);
+        // console.log(pageUrl);
         // console.log(groundTruth);
         let truthLength = groundTruth.length;
 
         let result = await dataExtract(pageUrl, page);
-        for (let j in result) {
-            let item = result[j];
-            for (let x = 0; x < truthLength; x++) {
-                if (groundTruth[x].innerText.replace(/\n+|\s+/gi, '').indexOf(item.content)) {
+        let nodeData = result.listNode.concat(result.listNodeCandidateFilter);
+        for (let j = 0; j < truthLength; j++) {
+            let item = groundTruth[j];
+            for (let x = 0, outputLength = nodeData.length; x < outputLength; x++) {
+                if (item.innerText.replace(/\n+|\s+/gi, '').indexOf(nodeData[x].content)) {
                     positive++;
                     break;
                 }
             }
         }
         positivePostItemCount += positive;
-        totalPostItemCount += result.length;
-        let positiveRate = positive / result.length;
-        console.log('Positive Rate: ' + '[' + positive + ', ' + result.length + '] ' + positiveRate);
+        totalPostItemCount += truthLength;
+        let positiveRate = positive / truthLength;
+        console.log('Positive Rate: ' + '[' + positive + ', ' + truthLength + '] ' + positiveRate);
         if (positiveRate > 0.7) {
             positivePageCount++;
         }
@@ -623,8 +672,12 @@ async function init() {
     });
     // Get the "viewport" of the page, as reported by the page.
 
-    // await dataExtract('http://bbs.3dmgame.com/thread-5784208-1-1.html', page);
-    await verification(page);
+    await dataExtract('http://club.kdnet.net/dispbbs.asp?id=12956003&boardid=1', page);
+    // await dataExtract('http://bbs.duowan.com/thread-46482672-1-1.html', page);
+    // await dataExtract('http://bbs.duowan.com/thread-46473142-1-1.html', page);
+    // await dataExtract('http://bbs.tianya.cn/post-16-1721682-1.shtml', page);
+    // await dataExtract('http://tieba.baidu.com/p/5835547095', page);
+    // await verification(page);
     // await downloadPdf('https://segmentfault.com/a/1190000015369542', 'backend/render/', 'segmentfault');
 }
 

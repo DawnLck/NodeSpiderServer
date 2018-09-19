@@ -4,8 +4,8 @@ const {domsModel} = require('../mongodb'),
 
 module.exports.getData = async () => {
     let data = await domsModel.find({}, {
-        document_width: 0,
-        document_height: 0,
+        // document_width: 0,
+        // document_height: 0,
         classList: 0,
         // links: 0,
         meta_href: 0,
@@ -24,21 +24,25 @@ module.exports.getData = async () => {
             /* Property 属性 */
             // offsetTop: data[i].offsetTop,
             // offsetLeft: data[i].offsetLeft,
-
+            //
             // realTop: data[i].realTop,
             // realLeft: data[i].realLeft,
 
-            width: data[i].width / 1000,
-            height: data[i].height / 30000,
+            // width: data[i].width / 1000,
+            // height: data[i].height / 30000,
+
+            widthPercentage: data[i].width / data[i].document_width,
+            heightPercentage: data[i].height / data[i].document_height,
 
             dom_level: data[i].dom_level / 10,
+            textBodyPercentage: data[i].textBodyPercentage,
+            relativeTextPercentage: data[i].relativeTextPercentage,
+
             childElementCount: data[i].childElementCount / 150,
             siblingsCount: data[i].siblingsCount / 150,
-
-            textBodyPercentage: data[i].textBodyPercentage,
-
             linkElementCount: data[i].links.length / 20,
-            imageElementCount: data[i].imageElementCount / 150
+            imageElementCount: data[i].imageElementCount / 150,
+            anchorMarkerCount: data[i].anchorMarkerCount / 150,
         });
         switch (data[i].dom_category) {
             case 'mainArea':
