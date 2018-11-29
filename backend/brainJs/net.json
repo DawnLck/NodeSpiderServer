@@ -19,101 +19,101 @@
         },
         {
             "0": {
-                "bias": -22.4047908782959,
+                "bias": 8.20217227935791,
                 "weights": {
-                    "widthPercentage": 18.94073486328125,
-                    "heightPercentage": -28.69698715209961,
-                    "dom_level": 19.16392707824707,
-                    "textBodyPercentage": -30.5950927734375,
-                    "relativeTextPercentage": 16.36256980895996,
-                    "childElementCount": -2.56007981300354,
-                    "siblingsCount": 24.97085189819336,
-                    "linkElementCount": -6.048788070678711,
-                    "imageElementCount": 39.33292007446289,
-                    "anchorMarkerCount": 9.247575759887695
+                    "widthPercentage": -16.598487854003906,
+                    "heightPercentage": 15.95268726348877,
+                    "dom_level": -9.672547340393066,
+                    "textBodyPercentage": 8.152316093444824,
+                    "relativeTextPercentage": -13.780223846435547,
+                    "childElementCount": -28.940826416015625,
+                    "siblingsCount": 2.267261028289795,
+                    "linkElementCount": 0.9210612773895264,
+                    "imageElementCount": -5.019575595855713,
+                    "anchorMarkerCount": -1.4830704927444458
                 }
             },
             "1": {
-                "bias": -12.917838096618652,
+                "bias": 2.2970705032348633,
                 "weights": {
-                    "widthPercentage": 11.827433586120605,
-                    "heightPercentage": 2.1317551136016846,
-                    "dom_level": 4.693174362182617,
-                    "textBodyPercentage": -22.834932327270508,
-                    "relativeTextPercentage": 19.122888565063477,
-                    "childElementCount": 31.53812026977539,
-                    "siblingsCount": -21.303600311279297,
-                    "linkElementCount": 0.1370657980442047,
-                    "imageElementCount": 1.986682415008545,
-                    "anchorMarkerCount": -1.4431707859039307
+                    "widthPercentage": 3.703305244445801,
+                    "heightPercentage": -7.360105514526367,
+                    "dom_level": 3.740161657333374,
+                    "textBodyPercentage": -0.7614247798919678,
+                    "relativeTextPercentage": -6.118711948394775,
+                    "childElementCount": -0.48038050532341003,
+                    "siblingsCount": 2.797788381576538,
+                    "linkElementCount": -0.009253394789993763,
+                    "imageElementCount": 0.6235758066177368,
+                    "anchorMarkerCount": -1.4363034963607788
                 }
             },
             "2": {
-                "bias": 10.942296981811523,
+                "bias": -3.294111967086792,
                 "weights": {
-                    "widthPercentage": 0.250539630651474,
-                    "heightPercentage": -8.76171875,
-                    "dom_level": 3.178704023361206,
-                    "textBodyPercentage": -5.101374626159668,
-                    "relativeTextPercentage": -2.844489574432373,
-                    "childElementCount": -0.0060954526998102665,
-                    "siblingsCount": 2.227611780166626,
-                    "linkElementCount": -9.189208984375,
-                    "imageElementCount": 0.24006086587905884,
-                    "anchorMarkerCount": -2.4239299297332764
+                    "widthPercentage": 0.7410681247711182,
+                    "heightPercentage": 5.470986366271973,
+                    "dom_level": 2.205153226852417,
+                    "textBodyPercentage": 8.135550498962402,
+                    "relativeTextPercentage": -0.9966103434562683,
+                    "childElementCount": 1.0824131965637207,
+                    "siblingsCount": 12.272890090942383,
+                    "linkElementCount": 1.2493021488189697,
+                    "imageElementCount": 3.047346353530884,
+                    "anchorMarkerCount": 5.2584452629089355
                 }
             },
             "3": {
-                "bias": -8.217131614685059,
+                "bias": 6.119822978973389,
                 "weights": {
-                    "widthPercentage": 3.1043407917022705,
-                    "heightPercentage": 2.778254747390747,
-                    "dom_level": 5.23941707611084,
-                    "textBodyPercentage": 17.00290298461914,
-                    "relativeTextPercentage": 0.39719265699386597,
-                    "childElementCount": -1.8654308319091797,
-                    "siblingsCount": 26.381895065307617,
-                    "linkElementCount": -6.911229610443115,
-                    "imageElementCount": 28.412471771240234,
-                    "anchorMarkerCount": 23.788818359375
+                    "widthPercentage": -2.219744920730591,
+                    "heightPercentage": 6.133022308349609,
+                    "dom_level": -4.701600551605225,
+                    "textBodyPercentage": -15.458148002624512,
+                    "relativeTextPercentage": 3.881845712661743,
+                    "childElementCount": -2.4988043308258057,
+                    "siblingsCount": -21.12117576599121,
+                    "linkElementCount": 1.67942476272583,
+                    "imageElementCount": -21.782655715942383,
+                    "anchorMarkerCount": -11.94559383392334
                 }
             }
         },
         {
             "0": {
-                "bias": 1.7489553689956665,
+                "bias": -5.181191921234131,
                 "weights": {
-                    "0": -6.615390777587891,
-                    "1": -18.44009017944336,
-                    "2": -9.455074310302734,
-                    "3": 3.7956278324127197
+                    "0": 13.20439624786377,
+                    "1": -0.9444205164909363,
+                    "2": -2.942225933074951,
+                    "3": -2.182250499725342
                 }
             },
             "1": {
-                "bias": -6.329704284667969,
+                "bias": 2.3380942344665527,
                 "weights": {
-                    "0": -18.472301483154297,
-                    "1": 20.08295440673828,
-                    "2": -16.726089477539062,
-                    "3": 0.5286045074462891
+                    "0": -12.635852813720703,
+                    "1": -14.068337440490723,
+                    "2": 5.322998523712158,
+                    "3": -2.640554666519165
                 }
             },
             "2": {
-                "bias": -26.53404426574707,
+                "bias": -7.066728115081787,
                 "weights": {
-                    "0": 27.380231857299805,
-                    "1": -22.670103073120117,
-                    "2": 9.186319351196289,
-                    "3": 20.50315284729004
+                    "0": -7.008464336395264,
+                    "1": 16.250913619995117,
+                    "2": 1.4341903924942017,
+                    "3": -22.174083709716797
                 }
             },
             "3": {
-                "bias": -0.7331539392471313,
+                "bias": -0.6860407590866089,
                 "weights": {
-                    "0": -17.552757263183594,
-                    "1": 18.57866096496582,
-                    "2": 12.728407859802246,
-                    "3": -23.96059799194336
+                    "0": -1.5518648624420166,
+                    "1": 0.8209015130996704,
+                    "2": -16.1749210357666,
+                    "3": 18.604116439819336
                 }
             }
         }
@@ -125,7 +125,7 @@
         "iterations": 20000,
         "errorThresh": 0.0005,
         "log": true,
-        "logPeriod": 500,
+        "logPeriod": 50,
         "learningRate": 0.3,
         "momentum": 0.1,
         "callbackPeriod": 10

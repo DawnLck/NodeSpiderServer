@@ -11,7 +11,7 @@ module.exports.networkConfig = {
 
     iterations: 20000,
     log: true,           // console.log() progress periodically
-    logPeriod: 500,       // number of iterations between logging
+    logPeriod: 50,       // number of iterations between logging
     learningRate: 0.3 // global learning rate, useful when training using streams
 };
 
