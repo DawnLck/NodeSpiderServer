@@ -8,6 +8,7 @@ const GLOBAL_KEYS = {
         primaryKeys: [
             'bbs',
             'BBS',
+            'Forums',
             '论坛',
             '贴吧'
         ],
@@ -83,11 +84,19 @@ const GLOBAL_KEYS = {
             '突发',
             '实时'
         ]
+    },
+    search: {
+        primaryKeys: [
+            '搜索'
+        ],
+        secondKeys: [
+            '记录'
+        ]
     }
 };
 
 /* 网页分类计算权重 */
-function calculateWeights(count, text, weight) {
+async function calculateWeights(count, text, weight) {
     if (!text) {
         return count;
     }
@@ -109,28 +118,17 @@ function calculateWeights(count, text, weight) {
 }
 
 async function process(pageCallback) {
-    console.log('... 网页分类 ...');
     let hostname = pageCallback.hostname;
-    console.log(hostname);
     let result = {
         bbs: hostname.indexOf('bbs') > -1 ? 1000 : 0,
         articles: hostname.indexOf('articles') > -1 ? 1000 : 0,
         news: hostname.indexOf('news') > -1 ? 1000 : 0
     };
-    console.log(result);
-    // let queue = [
-    //         'bbs',
-    //         'article',
-    //         'news'
-    //     ];
     result = await calculateWeights(result, pageCallback.title, 3);
     result = await calculateWeights(result, pageCallback.keywords, 2);
     result = await calculateWeights(result, pageCallback.description, 1);
 
     if ((result.bbs + result.articles + result.news) === 0) {
-        // console.log('基于内容进行第二次网页分类 ... ');
-        console.log('The second classify based on content ... ');
-
         result = await calculateWeights(result, pageCallback.bodyContent, 1);
     }
 
@@ -144,16 +142,7 @@ async function process(pageCallback) {
         }
     }
 
-    // for(let i = 0;i<queue.length;i++){
-    //     let cate = queue[i];
-    //     if(result[cate] > max){
-    //         result.category = cate;
-    //         max = result[cate];
-    //     }
-    //     cate = null;
-    // }
     max = null;
-
     return result;
 }
 
