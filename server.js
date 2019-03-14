@@ -82,7 +82,7 @@ let server = app.listen(8090, function() {
 async function init() {
   // await brainInit.init();
   // await console.log('Init the backend-app...');
-  // await puppeteer.init();
+  await puppeteer.init();
   // mongoInit.init();
   // webpageInit.init();
   // deepLearn.init();

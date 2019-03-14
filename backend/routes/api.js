@@ -18,11 +18,11 @@ router.get("/test", function(req, res) {
 });
 
 // 定义网站主页的路由
-router.post("/spider", function(req, res) {
+router.post("/spider", async function(req, res) {
   const website = req.body.website;
-  const callback = puppeteer.webDataExtraction(website);
+  let callback = await puppeteer.webpageDataExtraction(website);
   console.log(callback);
-  res.send(["hello"]);
+  res.send(callback);
 });
 
 module.exports = router;
