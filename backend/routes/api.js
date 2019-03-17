@@ -20,7 +20,7 @@ router.get("/test", function(req, res) {
 // 定义网站主页的路由
 router.post("/spider", async function(req, res) {
   const website = req.body.website;
-  let callback = await puppeteer.webpageDataExtraction(website);
+  let callback = await puppeteer.pageSpider(website);
   console.log(callback);
   res.send(callback);
 });

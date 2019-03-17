@@ -15,12 +15,12 @@ async function getPageInfo(page) {
       title: title,
       hostname: window.location.hostname,
       domain: window.location.hostname.split(".")[1],
-      keywords: keywords,
-      description: description,
-      bodyContent: bodyContent.slice(0, 100) + "....",
       width: document.documentElement.clientWidth,
       height: document.documentElement.clientHeight,
-      deviceScaleFactor: window.devicePixelRatio
+      deviceScaleFactor: window.devicePixelRatio,
+      keywords: keywords,
+      description: description,
+      bodyContent: bodyContent.slice(0, 100) + "...."
     };
   });
 }

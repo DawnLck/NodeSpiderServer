@@ -2,16 +2,17 @@
 
 const puppeteer = require("puppeteer"),
   path = require("path"),
-  fs = require("fs"),
-  Timer = require("../../tools/Timings"),
-  pageClassify = require("../../algorithm/pageClassify"),
+  { Timer } = require("../../tools/Timings"),
+  { pageClassify } = require("../../algorithm/pageClassify"),
   { getPageInfo } = require("../../algorithm/pageInfo"),
+  { pageExtract } = require("./page"),
   getDirPath = require("../../utils/getDirPath"),
   brain = require("brain.js"),
   config = require("./config"),
   { testDomsModel, testPagesModel } = require("../../mongodb");
 
 let page;
+
 /**
  * Puppeteer: page init
  */
@@ -38,15 +39,31 @@ let page;
 })();
 
 /** 网页数据提取
+ * pageInfo 页面相关信息
+ * pageClassification 页面分类结果
  * */
-async function dataExtract(url, page) {
-  await Timer.start("dataExtract");
-  console.log("网页信息提取： " + url);
+async function dataExtract(page) {
+  const pageInfo = await getPageInfo(page);
+  const pageClassification = await pageClassify(pageInfo);
+  const pageExtraction = await pageExtract(page);
+  return {
+    pageInfo: pageInfo,
+    pageClassification: pageClassification,
+    pageExtraction: pageExtraction
+  };
+}
+
+/**
+ * 提取单页的数据
+ * */
+async function pageSpider(webPageUrl) {
+  await Timer.start("pageSpider");
+  console.log("网页信息提取： " + webPageUrl);
 
   /** 页面操作相关
    * */
   await Promise.race([
-    page.goto(url, config.pageConfig).catch(e => void e),
+    page.goto(webPageUrl, config.pageConfig).catch(e => void e),
     new Promise(x => setTimeout(x, 20 * 1000))
   ]);
 
@@ -54,42 +71,43 @@ async function dataExtract(url, page) {
     path: "node_modules/jquery/dist/jquery.slim.min.js"
   });
 
+  await page.addScriptTag({
+    path: "backend/algorithm/global.js"
+  });
+
+  await page.addScriptTag({
+    path: "backend/algorithm/modules/regionalFocus.js"
+  });
+
+  await page.addScriptTag({
+    path: "backend/algorithm/modules/blockClustering.js"
+  });
+
   // await page.addScriptTag({path: 'node_modules/brain.js/browser.min.js'});
   await page.addStyleTag({
-    path: "backend/process/stylesheets/content.css"
+    path: "backend/process/stylesheets/content.min.css"
   });
   // page.on('console', msg => console.log('PAGE LOG:', msg.text())); //打印内部的console
 
-  /**
-   * 获得页面的相关信息
-   * */
-  const pageInfo = await getPageInfo(page);
+  let result = await dataExtract(page);
+
+  await Timer.stop("pageSpider");
+  console.log(`Page Spider Time: ${Timer.getTime("pageSpider")} ms`);
 
   //如果screen shot 为true，则截图
   if (config.screenShot) {
+    let imageName = `${result.pageInfo.title}.png`.replace(/\s*/g, "");
     await page.screenshot({
-      path: path.resolve("backend/render", pageInfo.title + ".png"),
+      path: path.resolve("backend/render", imageName),
       type: "png",
       fullPage: true
     });
+    if (process.env.NODE_ENV === "develop") {
+      result.screenShot = `http://localhost:8090/static/${imageName}`;
+    } else {
+      result.screenShot = `http://liangck:8090/static/${imageName}`;
+    }
   }
-
-  return {
-    pageInfo: pageInfo
-  };
-
-  /**
-   * 获得页面的分类结果
-   * */
-  const classifyCallback = await pageClassify.process(pageInfo);
-}
-
-/**
- * 提取单页的数据
- * */
-async function webpageDataExtraction(webPageUrl) {
-  let result = await dataExtract(webPageUrl, page);
-  console.log(result);
   return result;
 }
 
@@ -102,4 +120,4 @@ async function init() {
 }
 
 module.exports.init = init;
-module.exports.webpageDataExtraction = webpageDataExtraction;
+module.exports.pageSpider = pageSpider;

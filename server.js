@@ -33,6 +33,7 @@ const httpServer = http.createServer(app),
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
+app.use("/static", express.static("backend/render"));
 
 app.use("/init", initRoute);
 app.use("/data", dataRoute);
@@ -56,6 +57,8 @@ let server = app.listen(8090, function() {
   let host = server.address().address;
   let port = server.address().port;
   console.log("App listening at http://%s:%s", host, port);
+  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  global.NODE_ENV = process.NODE_ENV;
 });
 
 // httpServer.listen(PORT, function() {
