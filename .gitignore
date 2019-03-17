@@ -11,4 +11,4 @@ node_modules/
 
 backend/process/puppteerProcess/verification/
 
-backend/render
+backend/render/**
