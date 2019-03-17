@@ -13,8 +13,7 @@ const privateKey = fs.readFileSync("https/private.pem", "utf8"),
   certificate = fs.readFileSync("https/file.crt", "utf8"),
   credentials = { key: privateKey, cert: certificate };
 
-const webpageInit = require("./backend/init/webpageInit"),
-  brainInit = require("./backend/brainJs/init"),
+const brainInit = require("./backend/brainJs/init"),
   puppeteer = require("./backend/process/puppteerProcess/Puppeteer");
 // deepLearn = require('./backend/brainJs/brainInit'),
 // chromeHeadless = require('./backend/tools/ChromeHeadless');y
@@ -68,18 +67,6 @@ let server = app.listen(8090, function() {
 // httpsServer.listen(SSLPORT, function() {
 //   console.log("HTTPS Server is running on: https://localhost:%s", SSLPORT);
 // });
-
-/* Test */
-// let test = function () {
-//     webpageInit.parseSingleWebsite('test', 'https://www.zhihu.com/question/59615727/answer/167124652', 'div', function (index, data) {
-//         console.log('Parse website ' + index + ' ok with ' + data.length + ' data callback.');
-//         // console.log(data[0]);
-//         deepLearn.useContentDNN_Arr(data, function (callbackData) {
-//             console.log('Content-DNN is over....');
-//             // console.log(callbackData);
-//         });
-//     });
-// };
 
 /* 后台运行脚本 */
 async function init() {
