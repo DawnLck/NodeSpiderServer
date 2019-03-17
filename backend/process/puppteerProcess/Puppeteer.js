@@ -105,7 +105,7 @@ async function pageSpider(webPageUrl) {
     if (process.env.NODE_ENV === "develop") {
       result.screenShot = `http://localhost:8090/static/${imageName}`;
     } else {
-      result.screenShot = `http://liangck:8090/static/${imageName}`;
+      result.screenShot = `http://liangck.com:8090/static/${imageName}`;
     }
   }
   return result;
