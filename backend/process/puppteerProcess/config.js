@@ -23,8 +23,8 @@ module.exports = {
   },
   pageConfig: {
     timeout: 30000,
-    waitUntil: "domcontentloaded"
-    // waitUntil: 'networkidle2'
+    // waitUntil: "domcontentloaded"
+    waitUntil: "networkidle2"
   },
   TAG_LINK: "A",
   TAG_DIV: "DIV",

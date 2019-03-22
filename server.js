@@ -32,7 +32,7 @@ const httpServer = http.createServer(app),
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
-app.use("/static", express.static("backend/render"));
+app.use("/static", express.static("outputs/render"));
 
 app.use("/init", initRoute);
 app.use("/data", dataRoute);
