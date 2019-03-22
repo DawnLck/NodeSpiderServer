@@ -2,7 +2,7 @@
 
 const puppeteer = require("puppeteer"),
   path = require("path"),
-  { Timer } = require("../../tools/Timings"),
+  { Timer } = require("../../utils/Timings"),
   { pageClassify } = require("../../algorithm/pageClassify"),
   { getPageInfo } = require("../../algorithm/pageInfo"),
   { pageExtract } = require("./page"),
@@ -67,6 +67,10 @@ async function pageSpider(webPageUrl) {
     new Promise(x => setTimeout(x, 20 * 1000))
   ]);
 
+  await page.waitForNavigation({
+    waitUntil: "networkidle0"
+  });
+
   await page.addScriptTag({
     path: "node_modules/jquery/dist/jquery.slim.min.js"
   });
@@ -98,7 +102,7 @@ async function pageSpider(webPageUrl) {
   if (config.screenShot) {
     let imageName = `${result.pageInfo.title}.png`.replace(/\s*/g, "");
     await page.screenshot({
-      path: path.resolve("backend/render", imageName),
+      path: path.resolve("backend/output/render", imageName),
       type: "png",
       fullPage: true
     });

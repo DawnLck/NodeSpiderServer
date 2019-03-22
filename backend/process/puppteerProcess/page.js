@@ -2,7 +2,7 @@
  * page.js
  * 整合页面信息提取流程
  */
-const { Timer } = require("../../tools/Timings");
+const { Timer } = require("../../utils/Timings");
 /**
  * removeIframe 移除页面上的iframe
  */

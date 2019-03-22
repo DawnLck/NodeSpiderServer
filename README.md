@@ -11,3 +11,11 @@ Node-Spider v2.0
 
 1. Puppeteer
 2. brain.js
+
+## 文件架构
+
+- backend 后端代码
+  - algorithm 算法
+  - brainJs 神经网络
+  - tools 与多个业务相关的共同部分
+  - utils 与业务无关的共同部分
