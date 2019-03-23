@@ -20,7 +20,9 @@ async function getPageInfo(page) {
       deviceScaleFactor: window.devicePixelRatio,
       keywords: keywords,
       description: description,
-      bodyContent: bodyContent.slice(0, 100) + "...."
+      bodyContent: bodyContent
+        ? bodyContent.slice(0, 100) + "...."
+        : bodyContent
     };
   });
 }

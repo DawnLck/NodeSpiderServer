@@ -26,20 +26,54 @@ async function process(page, stepName, func) {
 }
 
 async function getRecords(page) {
-  let records = await process(page, "getRecords", () => {
+  console.log("### 获取数据记录 ###");
+  let result = await process(page, "getRecords", () => {
     let recordsArr = [];
-    console.log($(".spider-record"));
     $(".spider-record").each(function() {
       let dom = $(this);
+      let links = [];
+      if (dom.attr("href")) {
+        let href = dom.attr("href");
+        if (!href.includes("http")) {
+          href = document.location.origin + "/" + href;
+        }
+        links.push(href);
+      }
+      dom.find("a").each((index, e) => {
+        let href = $(e).attr("href");
+        if (href && !href.includes("http")) {
+          href = document.location.origin + "/" + href;
+        }
+        links.push(href);
+      });
       let item = {
-        content: dom.prop("innerText")
+        content: dom.prop("innerText"),
+        links: links
       };
       recordsArr.push(item);
     });
-    console.log(recordsArr);
-    return recordsArr;
+
+    let outputContentLength = recordsArr.reduce((acc, curr) => {
+      return (acc += curr.content.length);
+    }, 0);
+
+    let fullContent = $(".spider-main").prop("innerText");
+    let EI = outputContentLength / fullContent.length;
+
+    if (EI > 0.7) {
+      // console.log(recordsArr);
+      return {
+        EI: EI,
+        records: recordsArr
+      };
+    } else {
+      return {
+        EI: EI,
+        records: recordsArr
+      };
+    }
   });
-  return records;
+  return result;
 }
 async function pageExtract(page) {
   // 区域聚焦

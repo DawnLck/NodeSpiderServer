@@ -11,11 +11,15 @@ let bodyDom = {},
 
 /* 0. 异步获取Page的一些基本信息 */
 async function getPageBase() {
+  $("html").css({
+    "max-width": "1980px",
+    width: "100%"
+  });
   bodyDom = document.getElementsByTagName("body")[0];
   bodyWidth = bodyDom.scrollWidth;
   bodyHeight = bodyDom.scrollHeight;
-  pageX = bodyWidth / 2;
-  pageY = bodyHeight / 2;
+  pageX = document.documentElement.offsetWidth / 2;
+  pageY = document.documentElement.offsetHeight / 2;
   bodyContentLength = bodyDom.innerText.length;
 }
 
@@ -59,8 +63,11 @@ async function centerComparison(dom) {
     offset = Math.sqrt(Math.pow(pageX - domX, 2) + Math.pow(pageY - domY, 2)),
     centerProportion = offset / bodyWidth;
 
-  // dom.attr("data-domCenter", `(${domX}, ${domY})`);
-  // dom.attr("data-pageCenter", `(${domX}, ${domY})`);
+  dom.attr("data-offsetLeft", `${dom.offset().left}`);
+  dom.attr("data-offsetWidth", `${dom.prop("offsetWidth")}`);
+
+  dom.attr("data-domCenter", `(${domX}, ${domY})`);
+  dom.attr("data-pageCenter", `(${pageX}, ${pageY})`);
 
   // console.log(`[${domX}, ${domY}] / [${pageX}, ${pageY}]`);
   // console.log(`offset: ${offset}  bodyWidth: ${bodyWidth}`);
@@ -143,16 +150,10 @@ async function mergeArea() {
 // 区域聚焦主程序
 async function regionalFocus() {
   console.log("regionalFocus !");
-  let bodyDom = document.getElementsByTagName("body")[0];
-  let bodyWidth = bodyDom.scrollWidth,
-    bodyHeight = bodyDom.scrollHeight,
-    pageX = bodyWidth / 2,
-    pageY = bodyHeight / 2,
-    bodyContentLength = bodyDom.innerText.length;
-
-  let _allDiv = $("*");
 
   await getPageBase();
+
+  let _allDiv = $("*");
 
   _allDiv.each(async function() {
     let _self = $(this);

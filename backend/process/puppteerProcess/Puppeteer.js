@@ -49,7 +49,8 @@ async function dataExtract(page) {
   return {
     pageInfo: pageInfo,
     pageClassification: pageClassification,
-    pageExtraction: pageExtraction
+    pageExtraction: pageExtraction.records,
+    pageExtractionEI: pageExtraction.EI
   };
 }
 
@@ -97,7 +98,9 @@ async function pageSpider(webPageUrl) {
 
   //如果screen shot 为true，则截图
   if (config.screenShot) {
-    let imageName = `${result.pageInfo.title}.png`.replace(/\s*/g, "");
+    let imageName = `${result.pageInfo.title}.png`
+      .replace(/[\s\/\:\*\?\"<>\|]*/g, "")
+      .substring(0, 8);
     await page.screenshot({
       path: path.resolve("outputs/render", imageName),
       type: "png",

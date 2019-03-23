@@ -83,8 +83,8 @@ function DBSCAN(doms) {
         }
       }
       //   debugger;
-      console.log(`>>>> index ${i} <<<<`);
-      console.log(doms.map(p => p.clabel));
+      // console.log(`>>>> index ${i} <<<<`);
+      // console.log(doms.map(p => p.clabel));
     }
   }
   return doms.map((p, i) => ({ index: i, data: p, clabel: p.clabel }));
@@ -113,7 +113,7 @@ function DBSCAN2(doms) {
 
 /* 执行入口 */
 function clusteringBlocks() {
-  console.log("#####  Clustering Block   #####");
+  console.log("### Clustering Block ###");
 
   let spiderDoms = $(".spider-main").find(".spider");
   let childrenDoms = [];
@@ -122,6 +122,16 @@ function clusteringBlocks() {
     if ($(spiderDoms[i]).siblings(".spider").length > 3) {
       childrenDoms.push(spiderDoms[i]);
     }
+  }
+
+  if (childrenDoms.length < 3) {
+    console.log(
+      `Warning：ChildrenDom.length 为 ${
+        childrenDoms.length
+      }, 这可能是一篇文章！`
+    );
+    $(".spider-main").addClass("spider-record");
+    return false;
   }
 
   /* 计算所有点之间的距离 */
@@ -141,15 +151,15 @@ function clusteringBlocks() {
       });
     }
   }
-  console.log(
-    childrenDoms.map(p => ({
-      clabel: p.clabel,
-      distances: p.distances,
-      innerText: p.innerText
-    }))
-  );
+  // console.log(
+  //   childrenDoms.map(p => ({
+  //     clabel: p.clabel,
+  //     distances: p.distances,
+  //     innerText: p.innerText
+  //   }))
+  // );
   let clusterResult = DBSCAN(childrenDoms);
-  console.log(clusterResult);
+  // console.log(clusterResult);
   if (clusterResult[0].clabel === 0) {
     clusterResult[0].clabel = 1;
     clusterResult[0].data.clabel = 1;
