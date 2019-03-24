@@ -25,12 +25,12 @@ let page;
       interceptedRequest.url().endsWith(".png") ||
       interceptedRequest.url().endsWith(".jpg") ||
       interceptedRequest.url().endsWith(".jpeg") ||
-      interceptedRequest.url().endsWith(".gif")
+      interceptedRequest.url().endsWith(".gif") ||
+      interceptedRequest.url().endsWith(".mp4")
     )
       interceptedRequest.abort();
     else interceptedRequest.continue();
   });
-  // await page.waitFor(1000);
   await page.setViewport({
     width: 1366,
     height: 768 * 2
@@ -68,13 +68,20 @@ async function pageSpider(webPageUrl) {
     new Promise(x => setTimeout(x, 20 * 1000))
   ]);
 
-  console.log("Wait For Navigation");
+  if (webPageUrl.includes("weibo")) {
+    await page.waitFor(10000);
+  }
+
   await page.addScriptTag({
     path: "node_modules/jquery/dist/jquery.slim.min.js"
   });
 
   await page.addScriptTag({
     path: "backend/algorithm/global.js"
+  });
+
+  await page.addScriptTag({
+    path: "backend/algorithm/modules/getRecords.js"
   });
 
   await page.addScriptTag({
@@ -98,9 +105,10 @@ async function pageSpider(webPageUrl) {
 
   //如果screen shot 为true，则截图
   if (config.screenShot) {
-    let imageName = `${result.pageInfo.title}.png`
-      .replace(/[\s\/\:\*\?\"<>\|]*/g, "")
-      .substring(0, 8);
+    let imageName = `${result.pageInfo.title
+      .replace(/[\s\/\:\*\?\"<>\|\#，。]*/g, "")
+      .substring(0, 8)}.png`;
+    // console.log(`图片名称: ${imageName}`);
     await page.screenshot({
       path: path.resolve("outputs/render", imageName),
       type: "png",

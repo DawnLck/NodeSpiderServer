@@ -21,6 +21,7 @@ async function getPageBase() {
   pageX = document.documentElement.offsetWidth / 2;
   pageY = document.documentElement.offsetHeight / 2;
   bodyContentLength = bodyDom.innerText.length;
+  // console.log(bodyDom.innerText);
 }
 
 // 1. 面积大小比较 > 0.3
@@ -157,16 +158,14 @@ async function regionalFocus() {
 
   _allDiv.each(async function() {
     let _self = $(this);
-    if (!_self.hasClass("spider")) {
-      if (await areaComparison(_self)) {
-        // console.log("Area Ok!");
-        if (await textComparison(_self)) {
-          // console.log("Text Ok!");
-          await centerComparison(_self);
-        } else {
-        }
+    if (await areaComparison(_self)) {
+      // console.log("Area Ok!");
+      if (await textComparison(_self)) {
+        // console.log("Text Ok!");
+        await centerComparison(_self);
       } else {
       }
+    } else {
     }
   });
 
