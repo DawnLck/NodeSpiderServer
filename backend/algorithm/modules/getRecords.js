@@ -7,8 +7,9 @@
  * @param {*} content
  */
 async function cleanContent(content) {
-  content.replace(/[\s\n\r]/g, "");
-  return content;
+  let result = content;
+  result.replace(/[\s\n\r]/g, "");
+  return result;
 }
 
 /**
@@ -66,7 +67,7 @@ async function filterLinks(recordsArr) {
  * getRecords 获取数据记录
  * @param {*} page
  */
-async function getRecords(page) {
+async function getRecords() {
   console.log("### 获取数据记录 ###");
   let recordsArr = [];
 
@@ -82,27 +83,28 @@ async function getRecords(page) {
     }
     links.concat(getLinks(dom));
 
-    let content = await cleanContent(dom.prop("innerText"));
+    // let content = await cleanContent(dom.prop("innerText"));
+    let content = dom.prop("innerText");
+
     console.log(content);
     let item = {
       content: content,
       links: links
     };
-
     recordsArr.push(item);
   });
+
   await filterLinks(recordsArr);
+
   let outputContentLength = recordsArr.reduce((acc, curr) => {
     return (acc += curr.content.length);
   }, 0);
 
-  //   return {
-  //     records: recordsArr
-  //   };
-
-  let fullContent = cleanContent($(".spider-main").prop("innerText"));
+  // let fullContent = cleanContent($(".spider-main").prop("innerText"));
+  let fullContent = $(".spider-main").prop("innerText");
   console.log(`outputContentLength: ${outputContentLength}`);
   console.log(fullContent);
+
   let EI = outputContentLength / fullContent.length;
 
   if (EI > 0.7) {
@@ -124,4 +126,4 @@ async function getRecords(page) {
   }
 }
 
-console.log('### Warining ###');
+console.log("### Warining ###");

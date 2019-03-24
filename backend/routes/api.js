@@ -33,7 +33,7 @@ router.get("/test", function(req, res) {
 router.post("/spider", async function(req, res) {
   const website = req.body.website;
   let callback = await puppeteer.pageSpider(website);
-  console.log(callback);
+  // console.log(callback);
   res.send(callback);
 });
 
