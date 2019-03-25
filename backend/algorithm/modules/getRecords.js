@@ -6,37 +6,40 @@
  * Clean Content 清洁文本
  * @param {*} content
  */
-async function cleanContent(content) {
+function cleanContent(content) {
   let result = content;
-  result.replace(/[\s\n\r]/g, "");
+  result.replace(/[\s↵]/g, "");
   return result;
 }
 
 /**
  * 获取链接
  */
-async function getLinks(dom) {
+function getLinks(dom) {
   let links = [];
-  $(dom).each((index, e) => {
-    let href = $(e).attr("href");
+  $(dom)
+    .find("a")
+    .each((index, e) => {
+      let href = $(e).attr("href");
 
-    if (href && !href.includes(document.location.host)) {
-      href = document.location.origin + "/" + href;
-    }
+      if (href && !href.includes(document.location.host)) {
+        href = document.location.origin + "/" + href;
+      }
 
-    let item = {
-      text: $(e).text(),
-      href: href
-    };
+      let item = {
+        text: $(e).text(),
+        href: href
+      };
 
-    if (
-      !item.text ||
-      !item.text.length ||
-      item.href.includes("javascript:void(0)")
-    ) {
-      links.push(item);
-    }
-  });
+      if (
+        !item.text ||
+        !item.text.length ||
+        !item.href ||
+        !item.href.includes("javascript:void(0)")
+      ) {
+        links.push(item);
+      }
+    });
   return links;
 }
 
@@ -79,16 +82,16 @@ async function getRecords() {
       if (!href.includes("http")) {
         href = document.location.origin + "/" + href;
       }
-      links.push(href);
+      links.push({
+        text: dom.text(),
+        href: href
+      });
     }
-    links.concat(getLinks(dom));
 
-    // let content = await cleanContent(dom.prop("innerText"));
-    let content = dom.prop("innerText");
+    links = links.concat(getLinks(dom));
 
-    console.log(content);
     let item = {
-      content: content,
+      content: cleanContent(dom.prop("innerText")),
       links: links
     };
     recordsArr.push(item);
@@ -103,7 +106,7 @@ async function getRecords() {
   // let fullContent = cleanContent($(".spider-main").prop("innerText"));
   let fullContent = $(".spider-main").prop("innerText");
   console.log(`outputContentLength: ${outputContentLength}`);
-  console.log(fullContent);
+  // console.log(fullContent);
 
   let EI = outputContentLength / fullContent.length;
 
@@ -119,7 +122,7 @@ async function getRecords() {
       records: [
         {
           content: fullContent,
-          links: getLinks($(".spider-main"))
+          links: await getLinks($(".spider-main"))
         }
       ]
     };
