@@ -53,11 +53,15 @@ const BlockProperty = {
 /* 可视块的样式指标 */
 const BlockCss = {
   enumerable: [
-    "font-size",
-    "line-height",
     "color",
+    "line-height",
+    "font-size",
     "font-weight",
-    "font-family"
+    "font-family",
+    "padding",
+    "margin"
   ],
   others: ["content"]
 };
+
+const DATE_REG = /[0-2]\d{3}-\d{1,2}-\d{1,2}|((\d{4})年)?(\d{1,2})月(\d{1,2})日|\d{2}:\d{2}/gi;

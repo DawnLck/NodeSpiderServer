@@ -48,7 +48,7 @@ async function dataExtract(page) {
   const pageExtraction = await pageExtract(page);
   return {
     pageInfo: pageInfo,
-    pageClassification: pageClassification,
+    pageClassification: pageClassification ? pageClassification : null,
     pageExtraction: pageExtraction.records,
     pageExtractionEI: pageExtraction.EI
   };
@@ -77,7 +77,7 @@ async function pageSpider(webPageUrl) {
   });
 
   await page.addScriptTag({
-    path: "backend/algorithm/global.js"
+    path: "backend/algorithm/GLOBAL_CONST.js"
   });
 
   await page.addScriptTag({
