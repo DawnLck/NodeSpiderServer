@@ -13,7 +13,7 @@ module.exports = {
     // 打开开发者工具, 当此值为true时, headless总为false
     devtools: false,
     // headless为true, 不会打开浏览器
-    headless: false,
+    headless: true,
     args: [
       "--window-size=1366," + 768 * 2,
       "--disable-dev-shm-usage",
