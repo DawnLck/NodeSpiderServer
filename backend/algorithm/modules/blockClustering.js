@@ -15,17 +15,35 @@ function distance_countable(a, b) {
   //   console.log(`molecular: ${molecular}, denominator: ${denominator}`);
   return 1 - molecular / denominator;
 }
+
 function distance_enumerable(a, b) {
   return a === b ? 1 : 0;
 }
+
 function distance_other(a, b) {
   return distance_countable(a.length, b.length);
 }
+
+/**
+ * EIR / EffectiveInformationRatio
+ * 有效信息率 = 非链接文本长度 / 总文本长度
+ */
+function getEIR(dom) {
+  let linkContentLength = 0;
+  dom.find("a").each((index, e) => {
+    linkContentLength += $(e).prop("innerText").length;
+  });
+
+  let EffectiveInformationRatio =
+    1 - linkContentLength / dom.prop("innerText").length;
+  return EffectiveInformationRatio;
+}
+
 function distance(A, B) {
   let count = 0,
     num = 0;
-  let Acss = $(A),
-    Bcss = $(B);
+  let domA = $(A),
+    domB = $(B);
   for (let item of BlockProperty.countable) {
     let tem = distance_countable(A[item], B[item]);
     num++;
@@ -37,12 +55,21 @@ function distance(A, B) {
     count += tem;
   }
   for (let item of BlockCss.enumerable) {
-    let a = Acss.css(item),
-      b = Bcss.css(item),
+    let a = domA.css(item),
+      b = domB.css(item),
       tem = distance_enumerable(a, b);
     num++;
     count += tem;
   }
+
+  // let distance_EIR = distance_countable(
+  //   domA.attr("data-EIR"),
+  //   domB.attr("data-EIR")
+  // );
+
+  // count += distance_EIR * 10;
+  // num += 10;
+
   return 1 - count / num;
 }
 
@@ -115,14 +142,18 @@ function DBSCAN2(doms) {
 function clusteringBlocks() {
   console.log("### Clustering Block ###");
 
-  let spiderDoms = $(".spider-main").find(".spider");
   let childrenDoms = [];
 
-  for (let i = 0, length = spiderDoms.length; i < length; i++) {
-    if ($(spiderDoms[i]).siblings(".spider").length > 3) {
-      childrenDoms.push(spiderDoms[i]);
-    }
-  }
+  let spiderDoms = $(".spider-main")
+    .find(".spider")
+    .each((index, e) => {
+      let _self = $(e);
+      let EIR = getEIR(_self);
+      _self.attr("data-EIR");
+      if (_self.siblings(".spider").length > 3 && EIR > 0.5) {
+        childrenDoms.push(e);
+      }
+    });
 
   if (childrenDoms.length < 3) {
     console.log(

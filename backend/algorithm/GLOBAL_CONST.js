@@ -53,11 +53,13 @@ const BlockProperty = {
 /* 可视块的样式指标 */
 const BlockCss = {
   enumerable: [
-    "font-size",
-    "line-height",
     "color",
+    "line-height",
+    "font-size",
     "font-weight",
-    "font-family"
+    "font-family",
+    "padding",
+    "margin"
   ],
   others: ["content"]
 };
