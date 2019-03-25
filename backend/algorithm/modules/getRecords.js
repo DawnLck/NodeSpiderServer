@@ -13,6 +13,26 @@ function cleanContent(content) {
 }
 
 /**
+ * 链接数组去重
+ * @param {*} links
+ */
+function uniqLinks(links) {
+  let textSet = new Set();
+  let hrefSet = new Set();
+  for (let i = 0, length = links.length; i < length; i++) {
+    let item = links[i];
+    if (textSet.has(item.text) || hrefSet.has(item.href)) {
+      links[i].label = 0;
+      continue;
+    }
+    links[i].label = 1;
+    textSet.add(item.text);
+    hrefSet.add(item.href);
+  }
+  return links.filter(item => item.label == 1);
+}
+
+/**
  * 获取链接
  */
 function getLinks(dom) {
@@ -32,15 +52,22 @@ function getLinks(dom) {
       };
 
       if (
-        !item.text ||
-        !item.text.length ||
-        !item.href ||
-        !item.href.includes("javascript:void(0)")
+        item.text &&
+        item.text.length &&
+        item.href &&
+        !item.href.includes("javascript:") &&
+        !item.text.includes("下载") &&
+        !item.text.includes("保存") &&
+        !item.text.includes("赞") &&
+        !item.text.includes("踩") &&
+        !item.text.includes("回复") &&
+        !item.text.includes("收藏") &&
+        !item.text.includes("分享")
       ) {
         links.push(item);
       }
     });
-  return links;
+  return uniqLinks(links);
 }
 
 /**

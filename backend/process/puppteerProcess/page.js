@@ -32,9 +32,14 @@ async function process(page, stepName, func) {
  */
 async function pageExtract(page) {
   // 区域聚焦
-  await process(page, "regionalFocus", () => {
-    regionalFocus();
+  let mainArea = await process(page, "regionalFocus", () => {
+    return regionalFocus();
   });
+
+  if (!mainArea) {
+    console.error("ERROR: 未能找到正文区域！");
+    return false;
+  }
 
   //  可视块聚类
   let resultClustering = await process(page, "blockClustering", () => {
@@ -45,7 +50,6 @@ async function pageExtract(page) {
   let records = await process(page, "getRecords", () => {
     return getRecords();
   });
-
   return records;
 }
 

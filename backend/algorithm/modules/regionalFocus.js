@@ -178,6 +178,11 @@ async function regionalFocus() {
   //合并区域
   await mergeArea();
 
+  if (!$(".spider-main").length) {
+    console.log("ERROR: 未能找到正文区域！");
+    return false;
+  }
+
   // 标记非正文区域节点
   $(".spider-main")
     .siblings(".spider")
@@ -185,4 +190,6 @@ async function regionalFocus() {
       $(this).addClass("spider-nonMain");
       // console.log('Area Siblings ... ');
     });
+
+  return true;
 }
