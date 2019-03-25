@@ -101,25 +101,51 @@ async function getRecords() {
   console.log("### 获取数据记录 ###");
   let recordsArr = [];
 
+  let recordWidth = $(".spider-record").prop("offsetWidth");
+  let max_height = $(".spider-record").prop("offsetHeight");
+  let max_height_dom = null;
+  console.log(`Record Width：${recordWidth} \n Max_height: ${max_height}`);
+
+  $(".spider-main")
+    .find(".spider")
+    .each((index, e) => {
+      let _self = $(e);
+      if (
+        !_self.find(".spider-record").length &&
+        _self.prop("offsetHeight") > max_height
+      ) {
+        max_height = _self.prop("offsetHeight");
+        max_height_dom = _self;
+        console.log(`# ${max_height} - ${_self.text()}`);
+      }
+    });
+  console.log(max_height_dom);
+  if (max_height_dom) {
+    max_height_dom.addClass("spider-record spider-firstFloor");
+  }
+
   $(".spider-record").each(function() {
     let dom = $(this);
-    let links = [];
+    let _links = [];
     if (dom.attr("href")) {
       let href = dom.attr("href");
       if (!href.includes("http")) {
         href = document.location.origin + "/" + href;
       }
-      links.push({
+      _links.push({
         text: dom.text(),
         href: href
       });
     }
 
-    links = links.concat(getLinks(dom));
+    _links = _links.concat(getLinks(dom));
+
+    let _content = cleanContent(dom.prop("innerText"));
 
     let item = {
-      content: cleanContent(dom.prop("innerText")),
-      links: links
+      content: _content,
+      date: _content.match(DATE_REG),
+      links: _links
     };
     recordsArr.push(item);
   });
