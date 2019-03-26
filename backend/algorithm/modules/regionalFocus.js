@@ -26,6 +26,10 @@ async function getPageBase() {
 
 // 1. 面积大小比较 > 0.3
 async function areaComparison(dom) {
+  let domTag = dom.prop("tagName");
+  if (domTag === "P" || domTag === "SPAN") {
+    return false;
+  }
   let _width = dom.prop("offsetWidth"),
     _height = dom.prop("offsetHeight"),
     areaProportion = (_width * _height) / (bodyWidth * bodyHeight);
