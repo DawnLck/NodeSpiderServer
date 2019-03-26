@@ -144,7 +144,7 @@ async function getRecords() {
 
     let item = {
       content: _content,
-      date: _content.match(DATE_REG),
+      date: _content.match(DATE_REG) || ["未检索到日期"],
       links: _links
     };
     recordsArr.push(item);
