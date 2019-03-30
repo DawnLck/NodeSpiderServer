@@ -1,11 +1,11 @@
 /* Puppeteer */
 
 const puppeteer = require("puppeteer"),
+  fs = require("fs"),
   path = require("path"),
   { Timer } = require("../../utils/Timings"),
-  { pageClassify } = require("../../algorithm/pageClassify"),
-  { getPageInfo } = require("../../algorithm/pageInfo"),
-  { pageExtract } = require("./page"),
+  { pageClassify } = require("../../algorithm/modules/pageClassify"),
+  { pageExtract, getPageInfo } = require("./page"),
   getDirPath = require("../../utils/getDirPath"),
   brain = require("brain.js"),
   config = require("./config"),
@@ -44,13 +44,15 @@ let page;
  * */
 async function dataExtract(page) {
   const pageInfo = await getPageInfo(page);
-  const pageClassification = await pageClassify(pageInfo);
+  const pageClassification = await pageClassify(pageInfo.result);
   const pageExtraction = await pageExtract(page);
+
   return {
-    pageInfo: pageInfo,
+    pageInfo: pageInfo.result,
     pageClassification: pageClassification ? pageClassification : null,
-    pageExtraction: pageExtraction.records,
-    pageExtractionEI: pageExtraction.EI
+    pageExtraction: pageExtraction.result.records,
+    pageExtractionEI: pageExtraction.result.EI,
+    time: pageExtraction.time
   };
 }
 
@@ -99,13 +101,23 @@ async function pageSpider(webPageUrl) {
   // page.on('console', msg => console.log('PAGE LOG:', msg.text())); //打印内部的console
 
   let result = await dataExtract(page);
-
   await Timer.stop("pageSpider");
   console.log(`Page Spider Time: ${Timer.getTime("pageSpider")} ms`);
 
+  result.screenShot = await renderScreenShot(result.pageInfo);
+  result.dataFile = await storeDataFile(result.pageInfo, result);
+
+  return result;
+}
+
+/**
+ * 存储截图
+ */
+async function renderScreenShot(pageInfo) {
   //如果screen shot 为true，则截图
+  let screenShotUrl = null;
   if (config.screenShot) {
-    let imageName = `${result.pageInfo.title
+    let imageName = `${pageInfo.title
       .replace(/[\s\/\:\*\?\"<>\|\#，。]*/g, "")
       .substring(0, 8)}.png`;
     // console.log(`图片名称: ${imageName}`);
@@ -115,12 +127,44 @@ async function pageSpider(webPageUrl) {
       fullPage: true
     });
     if (process.env.NODE_ENV === "develop") {
-      result.screenShot = `http://localhost:8090/static/${imageName}`;
+      screenShotUrl = `http://localhost:8090/static/${imageName}`;
     } else {
-      result.screenShot = `http://liangck.com:8090/static/${imageName}`;
+      screenShotUrl = `http://liangck.com:8090/static/${imageName}`;
     }
   }
-  return result;
+  return screenShotUrl;
+}
+
+/**
+ * 存储提取的数据
+ */
+async function storeDataFile(pageInfo, result) {
+  let dataFileUrl = null;
+
+  if (config.screenShot) {
+    let fileName = `${pageInfo.title
+      .replace(/[\s\/\:\*\?\"<>\|\#，。]*/g, "")
+      .substring(0, 8)}.json`;
+
+    fs.writeFile(
+      path.resolve("outputs/dataFile", fileName),
+      JSON.stringify(result, null, 4),
+      {
+        encoding: "utf8"
+      },
+      err => {
+        if (err) throw err;
+        console.log("## DataFile 写入完成 ##");
+      }
+    );
+
+    if (process.env.NODE_ENV === "develop") {
+      dataFileUrl = `http://localhost:8090/static/${fileName}`;
+    } else {
+      dataFileUrl = `http://liangck.com:8090/static/${fileName}`;
+    }
+  }
+  return dataFileUrl;
 }
 
 /**

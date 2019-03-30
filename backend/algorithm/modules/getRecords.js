@@ -132,8 +132,10 @@ async function getRecords() {
       if (!href.includes("http")) {
         href = document.location.origin + "/" + href;
       }
+      let text = dom.text();
       _links.push({
-        text: dom.text(),
+        text: text,
+        length: text.length,
         href: href
       });
     }
@@ -144,6 +146,7 @@ async function getRecords() {
 
     let item = {
       content: _content,
+      length: _content.length,
       date: _content.match(DATE_REG) || ["未检索到日期"],
       links: _links
     };
@@ -157,7 +160,7 @@ async function getRecords() {
   }, 0);
 
   // let fullContent = cleanContent($(".spider-main").prop("innerText"));
-  let fullContent = $(".spider-main").prop("innerText");
+  let fullContent = cleanContent($(".spider-main").prop("innerText"));
   console.log(`outputContentLength: ${outputContentLength}`);
   // console.log(fullContent);
 
@@ -166,12 +169,21 @@ async function getRecords() {
   if (EI > 0.7) {
     // console.log(recordsArr);
     return {
-      EI: EI,
+      EI: {
+        value: EI,
+        resultLength: outputContentLength,
+        mainAreaContentLength: fullContent.length
+      },
+
       records: recordsArr
     };
   } else {
     return {
-      EI: EI,
+      EI: {
+        value: EI,
+        resultLength: outputContentLength,
+        mainAreaContentLength: fullContent.length
+      },
       records: [
         {
           content: fullContent,

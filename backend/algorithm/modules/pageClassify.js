@@ -1,7 +1,7 @@
 /*
 Page Classify 网页分类算法
 * */
-const { CLASSIFICATION } = require("./Classification");
+const { CLASSIFICATION } = require("../const/Classification");
 
 /* 权重计算函数 */
 async function calculateWeights(count, text, weight) {
