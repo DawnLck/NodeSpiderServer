@@ -7,9 +7,7 @@
  * @param {*} content
  */
 function cleanContent(content) {
-  let result = content;
-  result.replace(/[\s↵]/g, "");
-  return result;
+  return content.replace(/[\s↵\n]/g, "");
 }
 
 /**

@@ -33,7 +33,7 @@ let page;
   });
   await page.setViewport({
     width: 1366,
-    height: 768 * 2
+    height: 1000
   });
   console.log("### Puppeteer init ###");
 })();

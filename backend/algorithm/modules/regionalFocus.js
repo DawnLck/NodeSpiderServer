@@ -19,7 +19,7 @@ async function getPageBase() {
   bodyWidth = bodyDom.scrollWidth;
   bodyHeight = bodyDom.scrollHeight;
   pageX = document.documentElement.offsetWidth / 2;
-  pageY = document.documentElement.offsetHeight / 2;
+  pageY = document.body.scrollHeight / 2;
   bodyContentLength = bodyDom.innerText.length;
   // console.log(bodyDom.innerText);
 }

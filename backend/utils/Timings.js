@@ -13,7 +13,7 @@ const Timer = {
     if (time) Timer.data[key] = new Date() - time;
   },
   getTime: function(key) {
-    return Timer.data[key] / 1000 + " s";
+    return Timer.data[key] / 1000;
   }
 };
 module.exports.Timer = Timer;
