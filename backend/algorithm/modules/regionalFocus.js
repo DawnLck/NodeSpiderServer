@@ -19,8 +19,13 @@ async function getPageBase() {
   bodyWidth = bodyDom.scrollWidth;
   bodyHeight = bodyDom.scrollHeight;
   pageX = document.documentElement.offsetWidth / 2;
-  pageY = document.body.scrollHeight / 2;
+  pageY =
+    Math.max(
+      document.body.scrollHeight,
+      document.documentElement.offsetHeight
+    ) / 2;
   bodyContentLength = bodyDom.innerText.length;
+
   // console.log(bodyDom.innerText);
 }
 
@@ -60,7 +65,7 @@ async function textComparison(dom) {
   return false;
 }
 
-// 3. 中心偏移计算 < 0.4
+// 3. 中心偏移计算 < 0.5
 async function centerComparison(dom) {
   // console.log("》 中心偏移计算 《");
   let domX = dom.offset().left + dom.prop("offsetWidth") / 2,

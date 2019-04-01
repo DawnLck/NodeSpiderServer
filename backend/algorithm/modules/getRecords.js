@@ -81,8 +81,34 @@ function getArticle() {
         _tag = _self.prop("tagName");
 
       // console.log(`@@ ${_self.prop("innerText")}`);
-      if (_tag != "A" && _tag != "LI" && _tag != "STYLE" && _tag != "SCRIPT") {
+      if (
+        _tag != "A" &&
+        _tag != "LI" &&
+        _tag != "STYLE" &&
+        _tag != "SCRIPT" &&
+        _self.prop("scrollHeight") + _self.prop("offsetHeight") != 0
+      ) {
         if (_self.children().length) {
+          let childNodes = _self.prop("childNodes");
+          let flag = false;
+          for (let j = 0; j < childNodes.length; j++) {
+            let _node = childNodes[j];
+            if (_node.nodeName === "#text") {
+              let item = _node.nodeValue || _node.innerText;
+              if (item && item.length) {
+                content += item;
+                flag = true;
+              }
+              continue;
+            }
+            if (_node.nodeName === "A" && flag) {
+              let item = _node.nodeValue || _node.innerText;
+              if (item && item.length) {
+                content += item;
+                flag = true;
+              }
+            }
+          }
           getContent(_self);
         } else {
           content += _self.prop("innerText");
@@ -90,8 +116,8 @@ function getArticle() {
       }
     });
   }
-  getContent($(".spider-main"));
-  console.log(content);
+  let mainAreaDom = $(".spider-main");
+  getContent(mainAreaDom);
   return content;
 }
 
@@ -144,7 +170,7 @@ async function getRecords() {
         console.log(`# ${max_height} - ${_self.text()}`);
       }
     });
-  console.log(max_height_dom);
+  // console.log(max_height_dom);
 
   if (max_height_dom) {
     max_height_dom.addClass("spider-record spider-firstFloor");
@@ -154,7 +180,7 @@ async function getRecords() {
     let dom = $(this);
     let _links = [],
       _content = null,
-      _date = null,
+      _date = null;
 
     if (dom.attr("href")) {
       let href = dom.attr("href");
@@ -173,7 +199,7 @@ async function getRecords() {
     _content = cleanContent(dom.prop("innerText"));
     _date = _content.match(DATE_REG) || ["未检索到日期"];
 
-    if(_links.length > 0){
+    if (_links.length > 0) {
       let item = {
         content: _content,
         length: _content.length,
@@ -210,6 +236,18 @@ async function getRecords() {
     };
   } else {
     let _article = getArticle();
+    // _article = cleanContent(_article);
+    $(".spider-main")
+      .find(".spider-blockcluster")
+      .each((index, e) => {
+        $(e).removeClass("spider-blockcluster");
+      });
+    $(".spider-main")
+      .find(".spider-blockcluster-false")
+      .each((index, e) => {
+        $(e).removeClass("spider-blockcluster-false");
+      });
+    $(".spider-main").addClass("spider-record");
     return {
       EI: {
         value: EI,

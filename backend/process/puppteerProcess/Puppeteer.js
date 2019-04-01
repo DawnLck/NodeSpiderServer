@@ -117,7 +117,7 @@ async function renderScreenShot(pageInfo) {
   //如果screen shot 为true，则截图
   let screenShotUrl = null;
   if (config.screenShot) {
-    let imageName = `${pageInfo.title
+    let imageName = `${pageInfo.domain}.${pageInfo.title
       .replace(/[\s\/\:\*\?\"<>\|\#，。]*/g, "")
       .substring(0, 8)}.png`;
     // console.log(`图片名称: ${imageName}`);
@@ -142,7 +142,7 @@ async function storeDataFile(pageInfo, result) {
   let dataFileUrl = null;
 
   if (config.screenShot) {
-    let fileName = `${pageInfo.title
+    let fileName = `${pageInfo.domain}.${pageInfo.title
       .replace(/[\s\/\:\*\?\"<>\|\#，。]*/g, "")
       .substring(0, 8)}.json`;
 
