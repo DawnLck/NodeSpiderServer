@@ -69,6 +69,33 @@ function getLinks(dom) {
 }
 
 /**
+ * 获取文章型页面的正文
+ * 递归
+ */
+function getArticle() {
+  console.log("## Get Article ##");
+  let content = "";
+  function getContent(dom) {
+    dom.children().each((index, e) => {
+      let _self = $(e),
+        _tag = _self.prop("tagName");
+
+      // console.log(`@@ ${_self.prop("innerText")}`);
+      if (_tag != "A" && _tag != "LI" && _tag != "STYLE" && _tag != "SCRIPT") {
+        if (_self.children().length) {
+          getContent(_self);
+        } else {
+          content += _self.prop("innerText");
+        }
+      }
+    });
+  }
+  getContent($(".spider-main"));
+  console.log(content);
+  return content;
+}
+
+/**
  * 过滤链接
  * @param {*} page
  */
@@ -118,13 +145,17 @@ async function getRecords() {
       }
     });
   console.log(max_height_dom);
+
   if (max_height_dom) {
     max_height_dom.addClass("spider-record spider-firstFloor");
   }
 
   $(".spider-record").each(function() {
     let dom = $(this);
-    let _links = [];
+    let _links = [],
+      _content = null,
+      _date = null,
+
     if (dom.attr("href")) {
       let href = dom.attr("href");
       if (!href.includes("http")) {
@@ -139,16 +170,18 @@ async function getRecords() {
     }
 
     _links = _links.concat(getLinks(dom));
+    _content = cleanContent(dom.prop("innerText"));
+    _date = _content.match(DATE_REG) || ["未检索到日期"];
 
-    let _content = cleanContent(dom.prop("innerText"));
-
-    let item = {
-      content: _content,
-      length: _content.length,
-      date: _content.match(DATE_REG) || ["未检索到日期"],
-      links: _links
-    };
-    recordsArr.push(item);
+    if(_links.length > 0){
+      let item = {
+        content: _content,
+        length: _content.length,
+        date: _date,
+        links: _links
+      };
+      recordsArr.push(item);
+    }
   });
 
   await filterLinks(recordsArr);
@@ -164,7 +197,7 @@ async function getRecords() {
 
   let EI = outputContentLength / fullContent.length;
 
-  if (EI > 0.7) {
+  if (EI > 0.7 && recordsArr.length >= 3) {
     // console.log(recordsArr);
     return {
       EI: {
@@ -176,6 +209,7 @@ async function getRecords() {
       records: recordsArr
     };
   } else {
+    let _article = getArticle();
     return {
       EI: {
         value: EI,
@@ -184,7 +218,9 @@ async function getRecords() {
       },
       records: [
         {
-          content: fullContent,
+          content: _article,
+          length: _article.length,
+          date: _article.match(DATE_REG) || ["未检索到日期"],
           links: await getLinks($(".spider-main"))
         }
       ]

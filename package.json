@@ -5,8 +5,11 @@
   "author": "Liangck",
   "license": "MIT",
   "scripts": {
-    "develop": "cross-env NODE_ENV=develop node server.js",
+    "develop": "cross-env NODE_ENV=develop nodemon server.js",
     "production": "cross-env NODE_ENV=production nodemon server.js -i ./outputs/**"
+  },
+  "nodemonConfig": {
+    "ignore": ["test/*", "outputs/**"]
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
