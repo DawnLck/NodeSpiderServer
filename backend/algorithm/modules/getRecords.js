@@ -212,26 +212,28 @@ async function getRecords() {
 
   await filterLinks(recordsArr);
 
-  let outputContentLength = recordsArr.reduce((acc, curr) => {
-    return (acc += curr.content.length);
+  let outputContent = recordsArr.reduce((acc, curr) => {
+    return (acc += curr.content);
   }, 0);
 
   // let fullContent = cleanContent($(".spider-main").prop("innerText"));
   let fullContent = cleanContent($(".spider-main").prop("innerText"));
-  console.log(`outputContentLength: ${outputContentLength}`);
-  // console.log(fullContent);
 
-  let EI = outputContentLength / fullContent.length;
+  let oLength = outputContent.length,
+    fLength = fullContent.length;
 
-  if (EI > 0.7 && recordsArr.length >= 3) {
-    // console.log(recordsArr);
+  let EI = oLength / fLength,
+    EI_Object = {
+      value: EI,
+      outputContent: outputContent,
+      fullContent: fullContent,
+      outputResultLength: oLength,
+      mainAreaContentLength: fLength
+    };
+
+  if (EI > 0.5 && recordsArr.length >= 3) {
     return {
-      EI: {
-        value: EI,
-        resultLength: outputContentLength,
-        mainAreaContentLength: fullContent.length
-      },
-
+      EI: EI_Object,
       records: recordsArr
     };
   } else {
@@ -249,11 +251,7 @@ async function getRecords() {
       });
     $(".spider-main").addClass("spider-record");
     return {
-      EI: {
-        value: EI,
-        resultLength: outputContentLength,
-        mainAreaContentLength: fullContent.length
-      },
+      EI: EI_Object,
       records: [
         {
           content: _article,

@@ -149,7 +149,7 @@ function clusteringBlocks() {
     .each((index, e) => {
       let _self = $(e);
       let EIR = getEIR(_self);
-      _self.attr("data-EIR");
+      _self.attr("data-EIR", EIR);
       if (_self.siblings(".spider").length > 3 && EIR > 0.5) {
         childrenDoms.push(e);
       }
